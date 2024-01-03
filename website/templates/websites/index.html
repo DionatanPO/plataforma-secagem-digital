@@ -1,0 +1,42 @@
+{% extends "websites/base.html" %}
+{% block title %}Início{% endblock %}
+{% load static %}
+{% block content %}
+
+<main class="flex-shrink-0">
+
+    <!-- Header-->
+    <header class="py-5">
+        <img style="width: 100%; height: auto;" class="profile-img" src="{% static 'assets/fundo.png' %}" alt="..."/>
+
+    </header>
+
+    <!-- About Section-->
+    <section class="bg-light py-5">
+        <div class="container px-5">
+            <div class="row gx-5 justify-content-center">
+                <div class="col-xxl-8">
+                    <div class="text-center my-5">
+                        <h2 class="display-5 fw-bolder"><span
+                                class="text-gradient d-inline">Sobre a Startup Secagem Digital</span></h2>
+                        <!--                        <p class="lead fw-light mb-4">My name is Start Bootstrap and I help brands grow.</p>-->
+                        <p class="text-muted">Startup com objetivo de automatizar secadores estacionário e de fluxo
+                            misto, por meio da instalação de sensores digitais de temperatura e umidade relativa, obter
+                            a eficiência energética do processo em tempo real, bem como avaliar a qualidade das sementes
+                            de soja.</p>
+                        <div class="d-flex justify-content-center fs-2 gap-4">
+                            <a class="text-gradient"
+                               href="https://www.instagram.com/secagemdigital/?igshid=YzVkODRmOTdmMw%3D%3D"><i
+                                    class="bi bi-instagram"></i></a>
+                            <a class="text-gradient"
+                               href="https://www.facebook.com/profile.php?id=61554660220613"><i
+                                    class="bi bi-facebook"></i></a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
