@@ -11565,7 +11565,7 @@ html {
     background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
 }
 .showcase .showcase-img {
-    min-height: 30rem;
+    min-height: 20rem;
     background-size: cover;
 text-align: center;
 }
@@ -11574,8 +11574,8 @@ text-align: center;
   text-align: center;
 }
 .team-member img {
-  width: 14rem;
-  height: 14rem;
+  width: 10rem;
+  height: 10rem;
   border: 0.5rem solid rgba(0, 0, 0, 0.1);
 }
 .team-member h4, .team-member .h4 {
