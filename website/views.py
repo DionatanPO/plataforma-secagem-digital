@@ -12,3 +12,5 @@ def contato(request):
     return render(request, 'websites/contato.html')
 def cursos(request):
     return render(request, 'websites/cursos.html')
+def servicos(request):
+    return render(request, 'websites/servicos.html')
