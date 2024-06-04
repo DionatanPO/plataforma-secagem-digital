@@ -14,3 +14,5 @@ def cursos(request):
     return render(request, 'websites/cursos.html')
 def servicos(request):
     return render(request, 'websites/servicos.html')
+def politica_privacidade(request):
+    return render(request, 'websites/politica_privacidade.html')
