@@ -16,3 +16,9 @@ def servicos(request):
     return render(request, 'websites/servicos.html')
 def politica_privacidade(request):
     return render(request, 'websites/politica_privacidade.html')
+
+def politica_privacidade2(request):
+    return render(request, 'websites/politica_privacidade2.html')
+
+def politica_privacidade3(request):
+    return render(request, 'websites/politica_privacidade3.html')
