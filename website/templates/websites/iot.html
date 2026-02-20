@@ -1,0 +1,1330 @@
+{% extends "websites/base.html" %}
+{% block title %}Simulador de Aeração - Modo Livre e Cenários Prontos{% endblock %}
+{% load static %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<style>
+    :root {
+      --v: #29913c;
+      --l: #34a853;
+      --dark: #1a4724;
+      --light: #f8f9fa;
+      --gray: #6c757d;
+      --border-radius: 16px;
+    }
+
+    /* Estilos para abas */
+    .nav-tabs-custom {
+      border-bottom: 3px solid rgba(41,145,60,.1);
+      margin-bottom: 2rem;
+    }
+
+    .nav-tabs-custom .nav-link {
+      border: none;
+      border-radius: 10px 10px 0 0;
+      font-weight: 600;
+      padding: 1rem 2rem;
+      color: var(--gray);
+      transition: all 0.3s ease;
+      margin-right: 0.5rem;
+    }
+
+    .nav-tabs-custom .nav-link.active {
+      background: linear-gradient(135deg, var(--v), var(--l));
+      color: white;
+      border: none;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(41,145,60,.3);
+    }
+
+    .nav-tabs-custom .nav-link:hover {
+      border: none;
+      color: var(--v);
+      background: rgba(41,145,60,.1);
+    }
+
+    /* Estilos do modelo 3D */
+    .model-container {
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.1);
+      background: white;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      height: 100%;
+    }
+
+    .model-viewer-instructions {
+      background: rgba(41,145,60,.05);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    /* Estilos do simulador */
+    .simulator-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border-left: 5px solid var(--v);
+      transition: all 0.3s ease;
+    }
+
+    .simulator-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(41,145,60,.15);
+    }
+
+    .parametro-input {
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      padding: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .parametro-input:focus {
+      border-color: var(--v);
+      box-shadow: 0 0 0 0.2rem rgba(41,145,60,.25);
+    }
+
+    .parametro-label {
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .parametro-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--v);
+    }
+
+    .recomendacao-card {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      border-left: 4px solid;
+      transition: all 0.3s ease;
+    }
+
+    .recomendacao-emergencia { border-left-color: #dc3545; background: linear-gradient(135deg, #fff5f5, #ffe3e3); }
+    .recomendacao-secagem { border-left-color: #fd7e14; background: linear-gradient(135deg, #fff4e6, #ffe8cc); }
+    .recomendacao-resfriamento { border-left-color: #0dcaf0; background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
+    .recomendacao-manutencao { border-left-color: #198754; background: linear-gradient(135deg, #e8f5e8, #c8e6c9); }
+
+    .status-indicator {
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .normativa-badge {
+      background: rgba(41,145,60,.1);
+      color: var(--v);
+      border: 1px solid rgba(41,145,60,.2);
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+    }
+
+    .parametro-slider {
+      width: 100%;
+      margin: 1rem 0;
+      cursor: pointer;
+    }
+
+    .condicao-externa {
+      background: rgba(41,145,60,.05);
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 0.5rem 0;
+    }
+
+    /* Indicadores de status em tempo real */
+    .indicador-tempo-real {
+      transition: all 0.5s ease;
+    }
+
+    .parametro-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .parametro-card.critico {
+      border-color: #dc3545;
+      background: rgba(220,53,69,0.05);
+    }
+
+    .parametro-card.alerta {
+      border-color: #fd7e14;
+      background: rgba(253,126,20,0.05);
+    }
+
+    .parametro-card.ideal {
+      border-color: #198754;
+      background: rgba(25,135,84,0.05);
+    }
+
+    /* Estilos para cenários prontos */
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .scenario-card {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,.08);
+      border-left: 4px solid;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      height: 100%;
+    }
+
+    .scenario-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(41,145,60,.15);
+    }
+
+    .scenario-emergencia { border-left-color: #dc3545; }
+    .scenario-secagem { border-left-color: #fd7e14; }
+    .scenario-resfriamento { border-left-color: #0dcaf0; }
+    .scenario-manutencao { border-left-color: #198754; }
+
+    .scenario-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .scenario-icon {
+      font-size: 2rem;
+      margin-right: 1rem;
+    }
+
+    .scenario-parameters {
+      background: rgba(41,145,60,.03);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    .parameter-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+
+    .parameter-value-small {
+      font-weight: 600;
+      color: var(--v);
+    }
+
+    .scenario-description {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin: 1rem 0;
+    }
+
+    /* Animações */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .resultado-pulse {
+      animation: pulse 0.5s ease-in-out;
+    }
+
+    .slide-in {
+      animation: slideIn 0.3s ease-out;
+    }
+
+    /* Barra de progresso */
+    .condicao-bar {
+      height: 8px;
+      border-radius: 4px;
+      background: #e9ecef;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+
+    .condicao-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: all 0.5s ease;
+    }
+
+    /* Botões de ação */
+    .btn-scenario {
+      width: 100%;
+      margin-top: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-scenario:hover {
+      transform: translateY(-2px);
+    }
+
+
+</style>
+
+<main class="flex-shrink-0">
+    <!-- HEADER PRINCIPAL -->
+    <section class="section-padding bg-light">
+        <div class="container px-5">
+            <div class="row justify-content-center text-center" data-aos="fade-up">
+                <div class="col-lg-10 col-xxl-10">
+                    <h1 class="titulo-verde-gigante">
+                        <span class="text-gradient d-block mb-3">Sistema IoT de Monitoramento e Controle para Silo de Grãos</span>
+                    </h1>
+                    <p class="subtitulo mb-5">
+                        Explore diferentes modos: <strong>Simulação Livre</strong> ou <strong>Cenários Prontos</strong>.<br>
+                        Aprenda com exemplos reais baseados nas normativas oficiais.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO COM MODELO 3D E SIMULADOR -->
+    <section id="simuladorSection" class="section-padding bg-white">
+        <div class="container px-5">
+            <div class="row">
+                <!-- MODELO 3D -->
+                <div class="col-lg-8 mb-4">
+                    <div class="model-container">
+                        <model-viewer
+                                src="{% static 'assets/prototipo3d.glb' %}"
+                                alt="Silo IoT com ESP32 - MVP de Baixo Custo"
+                                camera-controls
+                                auto-rotate
+                                rotation-per-second="15"
+                                ar
+                                ar-modes="webxr scene-viewer quick-look"
+                                shadow-intensity="1"
+                                exposure="1.0"
+                                style="width: 100%; height: 400px;"
+                        >
+                            <button slot="ar-button"
+                                    class="btn btn-success rounded-pill px-4 py-2 position-absolute bottom-0 start-50 translate-middle-x mb-3">
+                                <i class="bi bi-phone-vibrate me-2"></i> Ver em Realidade Aumentada
+                            </button>
+                        </model-viewer>
+                    </div>
+
+                    <div class="model-viewer-instructions text-center">
+                        <p class="text-muted mb-2">
+                            <i class="bi bi-hand-index-thumb me-1"></i> <strong>Arraste para girar</strong> •
+                            <i class="bi bi-pinch me-1"></i> <strong>Pinça para zoom</strong> •
+                            <i class="bi bi-box-seam me-1"></i> <strong>AR disponível no celular</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- CARD DE STATUS RÁPIDO -->
+                <div class="col-lg-4 mb-4">
+                    <div class="simulator-card">
+                        <h4 class="text-gradient fw-bold mb-3">
+                            <i class="bi bi-speedometer2 me-2"></i>Status do Sistema
+                        </h4>
+
+                        <div id="statusRapido">
+                            <!-- Será atualizado em tempo real -->
+                            <div class="text-center py-4">
+                                <i class="bi bi-arrow-repeat display-4 text-muted mb-3"></i>
+                                <p class="text-muted">Configure os parâmetros para ver o status</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            <!-- ABA DE NAVEGAÇÃO -->
+            <ul class="nav nav-tabs nav-tabs-custom" id="simuladorTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="livre-tab" data-bs-toggle="tab" data-bs-target="#livre"
+                            type="button" role="tab">
+                        <i class="bi bi-sliders me-2"></i>Modo Livre
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="cenarios-tab" data-bs-toggle="tab" data-bs-target="#cenarios"
+                            type="button" role="tab">
+                        <i class="bi bi-collection-play me-2"></i>Cenários Prontos
+                    </button>
+                </li>
+            </ul>
+
+            <!-- CONTEÚDO DAS ABAS -->
+            <div class="tab-content" id="simuladorTabsContent">
+
+                <!-- ABA 1: MODO LIVRE -->
+                <div class="tab-pane fade show active" id="livre" role="tabpanel">
+                    <div class="row">
+                        <!-- COLUNA DE PARÂMETROS -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="simulator-card">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h3 class="text-gradient fw-bold mb-0">
+                                        <i class="bi bi-sliders me-2"></i>Controles em Tempo Real
+                                    </h3>
+                                    <span class="badge bg-success">
+                    <i class="bi bi-lightning-charge me-1"></i>LIVE
+                  </span>
+                                </div>
+
+                                <!-- Condições dos Grãos -->
+                                <div class="mb-4">
+                                    <h5 class="fw-bold text-muted mb-3">
+                                        <i class="bi bi-thermometer-half me-2"></i>Condições dos Grãos
+                                    </h5>
+
+                                    <div class="parametro-card" id="cardTempGrao">
+                                        <label class="parametro-label d-flex justify-content-between">
+                                            <span>Temperatura dos Grãos</span>
+                                            <span class="text-muted" id="statusTempGrao">✅ Ideal</span>
+                                        </label>
+                                        <input type="range" class="parametro-slider" id="tempGrao"
+                                               min="5" max="45" value="28" step="0.5">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="parametro-value" id="tempGraoValue">28.0°C</span>
+                                            <small class="text-muted">Limite: 35°C MAPA</small>
+                                        </div>
+                                        <div class="condicao-bar">
+                                            <div class="condicao-fill bg-success" id="barraTempGrao"
+                                                 style="width: 65%"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="parametro-card" id="cardUmidadeGrao">
+                                        <label class="parametro-label d-flex justify-content-between">
+                                            <span>Umidade dos Grãos</span>
+                                            <span class="text-muted" id="statusUmidadeGrao">⚠️ Atenção</span>
+                                        </label>
+                                        <input type="range" class="parametro-slider" id="umidadeGrao"
+                                               min="8" max="25" value="16" step="0.5">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="parametro-value" id="umidadeGraoValue">16.0%</span>
+                                            <small class="text-muted">Limite: 14% MAPA</small>
+                                        </div>
+                                        <div class="condicao-bar">
+                                            <div class="condicao-fill bg-warning" id="barraUmidadeGrao"
+                                                 style="width: 64%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Condições Externas -->
+                                <div class="mb-4">
+                                    <h5 class="fw-bold text-muted mb-3">
+                                        <i class="bi bi-cloud-sun me-2"></i>Condições Externas
+                                    </h5>
+
+                                    <div class="parametro-card">
+                                        <label class="parametro-label">Temperatura Externa</label>
+                                        <input type="range" class="parametro-slider" id="tempExterna"
+                                               min="-5" max="45" value="22" step="0.5">
+                                        <div class="parametro-value text-center" id="tempExternaValue">22.0°C</div>
+                                        <div class="condicao-bar">
+                                            <div class="condicao-fill bg-info" id="barraTempExterna"
+                                                 style="width: 49%"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="parametro-card">
+                                        <label class="parametro-label">Umidade Externa</label>
+                                        <input type="range" class="parametro-slider" id="umidadeExterna"
+                                               min="20" max="95" value="65" step="1">
+                                        <div class="parametro-value text-center" id="umidadeExternaValue">65%</div>
+                                        <div class="condicao-bar">
+                                            <div class="condicao-fill bg-info" id="barraUmidadeExterna"
+                                                 style="width: 65%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Botão de Reset -->
+                                <div class="d-grid">
+                                    <button class="btn btn-outline-secondary" onclick="resetarSimulador()">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Resetar para Valores Padrão
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- COLUNA DE RESULTADOS -->
+                        <div class="col-lg-6 mb-4">
+                            <div id="resultadoSimulacao">
+                                <!-- Resultado será injetado aqui via JavaScript -->
+                                <div class="simulator-card text-center">
+                                    <i class="bi bi-calculator display-1 text-muted mb-3"></i>
+                                    <h4 class="text-muted">Configure os parâmetros e calcule</h4>
+                                    <p class="text-muted">A recomendação de aeração aparecerá aqui</p>
+                                </div>
+                            </div>
+
+                            <!-- INDICADORES DE CONFORMIDADE -->
+                            <div class="simulator-card mt-4">
+                                <h5 class="text-gradient fw-bold mb-3">
+                                    <i class="bi bi-speedometer2 me-2"></i>Indicadores de Conformidade
+                                </h5>
+
+                                <div class="row text-center" id="indicadoresConformidade">
+                                    <!-- Será atualizado via JavaScript -->
+                                </div>
+
+                                <!-- PARÂMETROS CALCULADOS EM TEMPO REAL -->
+                                <div class="mt-4">
+                                    <h6 class="fw-bold text-muted mb-3">📊 Parâmetros Calculados</h6>
+                                    <div class="row" id="parametrosCalculados">
+                                        <!-- Será atualizado via JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+ <!-- ABA 2: CENÁRIOS PRONTOS -->
+<div class="tab-pane fade" id="cenarios" role="tabpanel">
+    <div class="scenario-grid">
+
+        <!-- CENÁRIO 1: EMERGÊNCIA -->
+        <div class="scenario-card scenario-emergencia">
+            <div class="scenario-header">
+                <div class="scenario-icon text-danger">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold text-danger mb-1">Emergência por Temperatura</h5>
+                    <small class="text-muted">Situação crítica - Ação imediata necessária</small>
+                </div>
+            </div>
+
+            <div class="scenario-parameters">
+                <div class="parameter-row">
+                    <span>Temp. Grão:</span>
+                    <span class="parameter-value-small text-danger">38.5°C</span>
+                </div>
+                <div class="parameter-row">
+                    <span>Umidade Grão:</span>
+                    <span class="parameter-value-small">15.5%</span>
+                </div>
+                <div class="parameter-row">
+                    <span>Temp. Externa:</span>
+                    <span class="parameter-value-small">32.0°C</span>
+                </div>
+                <div class="parameter-row">
+                    <span>Umidade Externa:</span>
+                    <span class="parameter-value-small">68%</span>
+                </div>
+            </div>
+
+            <div class="scenario-info mt-3">
+                <div class="info-section">
+                    <h6 class="fw-bold text-danger">
+                        <i class="bi bi-question-circle me-2"></i>Por que ocorre?
+                    </h6>
+                    <ul class="small text-muted mb-2">
+                        <li>Falha no sistema de ventilação/resfriamento</li>
+                        <li>Acúmulo excessivo de grãos gerando calor</li>
+                        <li>Condições ambientais de calor extremo</li>
+                        <li>Desenvolvimento de microorganismos termogênicos</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h6 class="fw-bold text-success">
+                        <i class="bi bi-graph-up-arrow me-2"></i>Melhorias com aeração:
+                    </h6>
+                    <ul class="small text-muted mb-2">
+                        <li>Redução imediata de 8-12°C em 6 horas</li>
+                        <li>Prevenção de perdas totais do lote</li>
+                        <li>Eliminação do risco de autocombustão</li>
+                        <li>Preservação do valor comercial</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h6 class="fw-bold text-info">
+                        <i class="bi bi-lightbulb me-2"></i>Informações técnicas:
+                    </h6>
+                    <ul class="small text-muted mb-0">
+                        <li><strong>Norma MAPA:</strong> IN 11/2007 - Limite 35°C</li>
+                        <li><strong>Tempo crítico:</strong> Deterioração em 24-48h</li>
+                        <li><strong>Vazão recomendada:</strong> 2.0-3.0 m³/min/ton</li>
+                        <li><strong>Monitoramento:</strong> A cada 30 minutos</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="btn btn-danger btn-scenario mt-3" onclick="aplicarCenario('emergencia')">
+                <i class="bi bi-play-circle me-2"></i>Executar Este Cenário
+            </button>
+        </div>
+
+        <!-- CENÁRIO 2: SECAGEM -->
+        <div class="scenario-card scenario-secagem">
+            <div class="scenario-header">
+                <div class="scenario-icon text-warning">
+                    <i class="bi bi-droplet-fill"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold text-warning mb-1">Secagem por Umidade Elevada</h5>
+                    <small class="text-muted">Condições favoráveis para secagem natural</small>
+                </div>
+            </div>
+
+            <div class="scenario-parameters">
+                <div class="parameter-row">
+                    <span>Temp. Grão:</span>
+                    <span class="parameter-value-small">26.0°C</span>
+                </div>
+                <div class="parameter-row">
+                    <span>Umidade Grão:</span>
+                    <span class="parameter-value-small text-warning">17.5%</span>
+                </div>
+                <div class="parameter-row">
+                    <span>Temp. Externa:</span>
+                    <span class="parameter-value-small">24.0°C</span>
+                </div>
+                <div class="parameter-row">
+                    <span>Umidade Externa:</span>
+                    <span class="parameter-value-small text-success">48%</span>
+                </div>
+            </div>
+
+            <div class="scenario-info mt-3">
+                <div class="info-section">
+                    <h6 class="fw-bold text-warning">
+                        <i class="bi bi-question-circle me-2"></i>Por que ocorre?
+                    </h6>
+                    <ul class="small text-muted mb-2">
+                        <li>Colheita realizada com orvalho ou chuva</li>
+                        <li>Armazenamento prévio em condições úmidas</li>
+                        <li>Falha no sistema de secagem inicial</li>
+                        <li>Condensação interna do silo</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h6 class="fw-bold text-success">
+                        <i class="bi bi-graph-up-arrow me-2"></i>Melhorias com aeração:
+                    </h6>
+                    <ul class="small text-muted mb-2">
+                        <li>Redução de 1-2% de umidade por dia</li>
+                        <li>Adequação ao padrão comercial (14%)</li>
+                        <li>Prevenção de fungos e micotoxinas</li>
+                        <li>Economia de energia vs. secagem artificial</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h6 class="fw-bold text-info">
+                        <i class="bi bi-lightbulb me-2"></i>Informações técnicas:
+                    </h6>
+                    <ul class="small text-muted mb-0">
+                        <li><strong>Norma MAPA:</strong> IN 11/2007 - Comercial 14%</li>
+                        <li><strong>Ponto orvalho:</strong> 13.2°C (favorável)</li>
+                        <li><strong>Vazão recomendada:</strong> 1.5 m³/min/ton</li>
+                        <li><strong>Tempo estimado:</strong> 2-3 dias para 13%</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="btn btn-warning btn-scenario mt-3" onclick="aplicarCenario('secagem')">
+                <i class="bi bi-play-circle me-2"></i>Executar Este Cenário
+            </button>
+        </div>
+
+        <!-- CENÁRIO 3: RESFRIAMENTO -->
+        <div class="scenario-card scenario-resfriamento">
+            <div class="scenario-header">
+                <div class="scenario-icon text-info">
+                    <i class="bi bi-snow2"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold text-info mb-1">Resfriamento Noturno</h5>
+                    <small class="text-muted">Condições otimizadas para eficiência energética</small>
+                </div>
+            </div>
+
+            <div class="scenario-parameters">
+                <div class="parameter-row">
+                    <span>Temp. Grão:</span>
+                    <span class="parameter-value-small text-info">28.5°C</span>
+                </div>
+                <div class="parameter-row">
+                    <span>Umidade Grão:</span>
+                    <span class="parameter-value-small">13.2%</span>
+                </div>
+                <div class="parameter-row">
+                    <span>Temp. Externa:</span>
+                    <span class="parameter-value-small text-success">16.0°C</span>
+                </div>
+                <div class="parameter-row">
+                    <span>Umidade Externa:</span>
+                    <span class="parameter-value-small">62%</span>
+                </div>
+            </div>
+
+            <div class="scenario-info mt-3">
+                <div class="info-section">
+                    <h6 class="fw-bold text-info">
+                        <i class="bi bi-question-circle me-2"></i>Por que ocorre?
+                    </h6>
+                    <ul class="small text-muted mb-2">
+                        <li>Aquecimento diurno natural dos grãos</li>
+                        <li>Respiração metabólica contínua</li>
+                        <li>Condutividade térmica do material do silo</li>
+                        <li>Falta de ventilação preventiva diurna</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h6 class="fw-bold text-success">
+                        <i class="bi bi-graph-up-arrow me-2"></i>Melhorias com aeração:
+                    </h6>
+                    <ul class="small text-muted mb-2">
+                        <li>Economia de 60-70% em energia elétrica</li>
+                        <li>Redução de 2-3°C por hora durante a noite</li>
+                        <li>Prevenção de pontos quentes no silo</li>
+                        <li>Aumento da vida útil do armazenamento</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h6 class="fw-bold text-info">
+                        <i class="bi bi-lightbulb me-2"></i>Informações técnicas:
+                    </h6>
+                    <ul class="small text-muted mb-0">
+                        <li><strong>Base técnica:</strong> Embrapa Soja 2022</li>
+                        <li><strong>Diferencial térmico:</strong> 12.5°C (ótimo)</li>
+                        <li><strong>Vazão recomendada:</strong> 0.8 m³/min/ton</li>
+                        <li><strong>Horário ideal:</strong> 20h às 6h</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="btn btn-info btn-scenario mt-3" onclick="aplicarCenario('resfriamento')">
+                <i class="bi bi-play-circle me-2"></i>Executar Este Cenário
+            </button>
+        </div>
+
+        <!-- CENÁRIO 4: IDEAL -->
+        <div class="scenario-card scenario-manutencao">
+            <div class="scenario-header">
+                <div class="scenario-icon text-success">
+                    <i class="bi bi-check-circle-fill"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold text-success mb-1">Condições Ideais</h5>
+                    <small class="text-muted">Armazenamento perfeito - Manutenção preventiva</small>
+                </div>
+            </div>
+
+            <div class="scenario-parameters">
+                <div class="parameter-row">
+                    <span>Temp. Grão:</span>
+                    <span class="parameter-value-small text-success">16.5°C</span>
+                </div>
+                <div class="parameter-row">
+                    <span>Umidade Grão:</span>
+                    <span class="parameter-value-small text-success">12.8%</span>
+                </div>
+                <div class="parameter-row">
+                    <span>Temp. Externa:</span>
+                    <span class="parameter-value-small">18.0°C</span>
+                </div>
+                <div class="parameter-row">
+                    <span>Umidade Externa:</span>
+                    <span class="parameter-value-small">65%</span>
+                </div>
+            </div>
+
+            <div class="scenario-info mt-3">
+                <div class="info-section">
+                    <h6 class="fw-bold text-success">
+                        <i class="bi bi-question-circle me-2"></i>Como manter?
+                    </h6>
+                    <ul class="small text-muted mb-2">
+                        <li>Monitoramento contínuo dos parâmetros</li>
+                        <li>Aeração preventiva quando necessário</li>
+                        <li>Isolamento térmico adequado do silo</li>
+                        <li>Controle de qualidade na entrada</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h6 class="fw-bold text-success">
+                        <i class="bi bi-graph-up-arrow me-2"></i>Vantagens:
+                    </h6>
+                    <ul class="small text-muted mb-2">
+                        <li>Preservação por 12+ meses sem perdas</li>
+                        <li>Máximo valor comercial mantido</li>
+                        <li>Redução de custos com energia</li>
+                        <li>Minimização de riscos operacionais</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h6 class="fw-bold text-info">
+                        <i class="bi bi-lightbulb me-2"></i>Informações técnicas:
+                    </h6>
+                    <ul class="small text-muted mb-0">
+                        <li><strong>Padrão MAPA:</strong> IN 11/2007 + Embrapa</li>
+                        <li><strong>Faixa ideal:</strong> 10-20°C / 11-13%</li>
+                        <li><strong>Vazão manutenção:</strong> 0.2 m³/min/ton</li>
+                        <li><strong>Monitoramento:</strong> A cada 6 horas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="btn btn-success btn-scenario mt-3" onclick="aplicarCenario('ideal')">
+                <i class="bi bi-play-circle me-2"></i>Executar Este Cenário
+            </button>
+        </div>
+
+    </div>
+
+    <!-- INFO CENÁRIOS -->
+    <div class="simulator-card mt-4">
+        <h5 class="text-gradient fw-bold mb-3">
+            <i class="bi bi-info-circle me-2"></i>Sobre os Cenários Prontos
+        </h5>
+        <p class="text-muted mb-0">
+            Cada cenário representa uma situação real baseada nas normativas do MAPA e Embrapa.
+            Clique em qualquer cenário para carregar automaticamente os parâmetros no simulador
+            e ver a recomendação do sistema de aeração automática. As informações incluem causas,
+            benefícios da aeração e dados técnicos específicos.
+        </p>
+    </div>
+</div>
+
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    // Variáveis globais para controle em tempo real
+    let ultimoResultado = null;
+    let calculando = false;
+
+    // Inicializar simulador
+    document.addEventListener('DOMContentLoaded', function() {
+        // Adicionar event listeners para todos os controles
+        const controles = ['tempGrao', 'umidadeGrao', 'tempExterna', 'umidadeExterna'];
+
+        controles.forEach(controle => {
+            document.getElementById(controle).addEventListener('input', function() {
+                atualizarValor(this.id, this.id + 'Value');
+                calcularAeracaoEmTempoReal();
+            });
+        });
+
+        // Calcular cenário inicial
+        calcularAeracaoEmTempoReal();
+        atualizarIndicadoresConformidade();
+        atualizarParametrosCalculados();
+        atualizarStatusRapido();
+    });
+
+    // Função para cálculo em tempo real
+    function calcularAeracaoEmTempoReal() {
+        if (calculando) return;
+
+        calculando = true;
+
+        setTimeout(() => {
+            const tempGrao = parseFloat(document.getElementById('tempGrao').value);
+            const umidadeGrao = parseFloat(document.getElementById('umidadeGrao').value);
+            const tempExterna = parseFloat(document.getElementById('tempExterna').value);
+            const umidadeExterna = parseFloat(document.getElementById('umidadeExterna').value);
+
+            // Calcular ponto de orvalho
+            const pontoOrvalho = calcularPontoOrvalho(tempExterna, umidadeExterna);
+
+            // Determinar cenário
+            const resultado = determinarCenarioAeracao(
+                tempGrao, umidadeGrao, tempExterna, umidadeExterna, pontoOrvalho
+            );
+
+            // Atualizar interface
+            atualizarStatusTempoReal(resultado);
+            exibirResultado(resultado, pontoOrvalho);
+            atualizarBarrasProgresso(tempGrao, umidadeGrao, tempExterna, umidadeExterna);
+            atualizarIndicadoresConformidade();
+            atualizarParametrosCalculados(tempGrao, umidadeGrao, tempExterna, umidadeExterna, pontoOrvalho);
+            atualizarStatusRapido(resultado);
+
+            ultimoResultado = resultado;
+            calculando = false;
+        }, 50);
+    }
+
+    // Função para atualizar valores dos sliders
+    function atualizarValor(sliderId, displayId) {
+        const slider = document.getElementById(sliderId);
+        const display = document.getElementById(displayId);
+
+        if (sliderId.includes('temp')) {
+            display.textContent = parseFloat(slider.value).toFixed(1) + '°C';
+        } else {
+            display.textContent = slider.value + '%';
+        }
+    }
+
+    // Função para calcular ponto de orvalho
+    function calcularPontoOrvalho(temperatura, umidadeRelativa) {
+        const a = 17.27;
+        const b = 237.7;
+        const alpha = ((a * temperatura) / (b + temperatura)) + Math.log(umidadeRelativa/100.0);
+        return (b * alpha) / (a - alpha);
+    }
+
+    // Função principal de determinação de cenário
+    function determinarCenarioAeracao(tempGrao, umidadeGrao, tempExterna, umidadeExterna, pontoOrvalho) {
+        // PARÂMETROS NORMA MAPA
+        const LIMITE_EMERGENCIA = 35;
+        const LIMITE_RESFRIAMENTO = 25;
+        const LIMITE_UMIDADE_SECAGEM = 14;
+
+        // 1. VERIFICAÇÃO DE EMERGÊNCIA (Norma MAPA)
+        if (tempGrao >= LIMITE_EMERGENCIA) {
+            return {
+                tipo: 'EMERGENCIA',
+                cor: 'danger',
+                icone: '⚡',
+                titulo: 'AERAÇÃO DE EMERGÊNCIA',
+                descricao: 'Temperatura crítica detectada nos grãos! Aeração máxima necessária.',
+                acoes: [
+                    'Aeração contínua máxima imediata',
+                    'Monitoramento a cada 30 minutos',
+                    'Notificar técnico responsável',
+                    'Verificar causas do aquecimento'
+                ],
+                normativa: 'MAPA IN 11/2007 - Temperatura máxima de segurança',
+                vazaoRecomendada: Math.min(2.0 + (tempGrao - 35) * 0.2, 3.0),
+                tempoOperacao: 'Contínuo até temperatura < 30°C',
+                prioridade: 1
+            };
+        }
+
+        // 2. VERIFICAÇÃO DE SECAGEM (Norma MAPA)
+        if (umidadeGrao >= LIMITE_UMIDADE_SECAGEM) {
+            const condicoesFavoraveis = (umidadeExterna < 70 && pontoOrvalho < tempGrao - 5);
+
+            if (condicoesFavoraveis) {
+                return {
+                    tipo: 'SECAGEM',
+                    cor: 'warning',
+                    icone: '🌾',
+                    titulo: 'MODO SECAGEM ATIVA',
+                    descricao: 'Condições ideais para redução de umidade dos grãos.',
+                    acoes: [
+                        'Aeração para secagem contínua',
+                        'Manter ventilação enquanto condições externas forem favoráveis',
+                        'Monitorar umidade a cada 2 horas',
+                        'Registrar taxa de secagem'
+                    ],
+                    normativa: 'MAPA IN 11/2007 - Umidade comercial máxima 14%',
+                    vazaoRecomendada: 1.5,
+                    tempoOperacao: 'Até umidade ≤ 13%',
+                    prioridade: 2
+                };
+            } else {
+                return {
+                    tipo: 'SECAGEM_ALERTA',
+                    cor: 'warning',
+                    icone: '⚠️',
+                    titulo: 'SECAGEM NECESSÁRIA',
+                    descricao: 'Umidade acima do padrão comercial, mas condições externas não ideais para secagem.',
+                    acoes: [
+                        'Aguardar condições externas favoráveis',
+                        'Monitorar umidade externa continuamente',
+                        'Considerar secagem artificial se disponível',
+                        'Registrar tentativas de aeração'
+                    ],
+                    normativa: 'MAPA IN 11/2007 - Padrão comercial 14% máximo',
+                    vazaoRecomendada: 0.5,
+                    tempoOperacao: 'Seletiva - apenas quando externa favorável',
+                    prioridade: 2
+                };
+            }
+        }
+
+        // 3. VERIFICAÇÃO DE RESFRIAMENTO
+        if (tempGrao >= LIMITE_RESFRIAMENTO) {
+            const condicoesFavoraveis = (tempExterna < tempGrao - 3 && pontoOrvalho < tempGrao - 3);
+
+            if (condicoesFavoraveis) {
+                return {
+                    tipo: 'RESFRIAMENTO',
+                    cor: 'info',
+                    icone: '❄️',
+                    titulo: 'MODO RESFRIAMENTO',
+                    descricao: 'Condições favoráveis para redução de temperatura dos grãos.',
+                    acoes: [
+                        'Aeração para resfriamento noturno',
+                        'Aproveitar diferença térmica grão-ambiente',
+                        'Monitorar temperatura a cada 4 horas',
+                        'Interromper se condições se tornarem desfavoráveis'
+                    ],
+                    normativa: 'Embrapa 2022 - Temperatura ideal 10-15°C',
+                    vazaoRecomendada: 0.8,
+                    tempoOperacao: 'Noturno até temperatura ≤ 20°C',
+                    prioridade: 3
+                };
+            }
+        }
+
+        // 4. MODO MANUTENÇÃO (Condições estáveis)
+        return {
+            tipo: 'MANUTENCAO',
+            cor: 'success',
+            icone: '✅',
+            titulo: 'MODO MANUTENÇÃO',
+            descricao: 'Condições dentro dos padrões normativos de armazenamento.',
+            acoes: [
+                'Aeração mínima para renovação de ar',
+                'Monitoramento padrão a cada 6 horas',
+                'Manter registro de temperatura e umidade',
+                'Preparar para eventual resfriamento noturno'
+            ],
+            normativa: 'MAPA IN 11/2007 - Condições estáveis de armazenamento',
+            vazaoRecomendada: 0.2,
+            tempoOperacao: 'Manutenção contínua',
+            prioridade: 4
+        };
+    }
+
+    // Função para aplicar cenários
+    function aplicarCenario(tipo) {
+        const cenarios = {
+            emergencia: {
+                tempGrao: 38.5,
+                umidadeGrao: 15.5,
+                tempExterna: 32.0,
+                umidadeExterna: 68
+            },
+            secagem: {
+                tempGrao: 26.0,
+                umidadeGrao: 17.5,
+                tempExterna: 24.0,
+                umidadeExterna: 48
+            },
+            resfriamento: {
+                tempGrao: 28.5,
+                umidadeGrao: 13.2,
+                tempExterna: 16.0,
+                umidadeExterna: 62
+            },
+            ideal: {
+                tempGrao: 16.5,
+                umidadeGrao: 12.8,
+                tempExterna: 18.0,
+                umidadeExterna: 65
+            }
+        };
+
+        const cenario = cenarios[tipo];
+
+        // Atualizar sliders
+        document.getElementById('tempGrao').value = cenario.tempGrao;
+        document.getElementById('umidadeGrao').value = cenario.umidadeGrao;
+        document.getElementById('tempExterna').value = cenario.tempExterna;
+        document.getElementById('umidadeExterna').value = cenario.umidadeExterna;
+
+        // Atualizar displays
+        atualizarValor('tempGrao', 'tempGraoValue');
+        atualizarValor('umidadeGrao', 'umidadeGraoValue');
+        atualizarValor('tempExterna', 'tempExternaValue');
+        atualizarValor('umidadeExterna', 'umidadeExternaValue');
+
+        // Recalcular
+        calcularAeracaoEmTempoReal();
+
+        // Mudar para aba do modo livre
+        const tab = new bootstrap.Tab(document.getElementById('livre-tab'));
+        tab.show();
+
+        // Feedback
+        showNotification(`Cenário "${tipo}" carregado com sucesso!`, 'success');
+    }
+
+    // Função para mostrar notificação
+    function showNotification(mensagem, tipo) {
+        // Criar elemento de notificação
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 1050; min-width: 300px;';
+        notification.innerHTML = `
+            ${mensagem}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Remover após 3 segundos
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 3000);
+    }
+
+    // Função para resetar simulador
+    function resetarSimulador() {
+        document.getElementById('tempGrao').value = 28;
+        document.getElementById('umidadeGrao').value = 16;
+        document.getElementById('tempExterna').value = 22;
+        document.getElementById('umidadeExterna').value = 65;
+
+        // Atualizar todos os displays
+        atualizarValor('tempGrao', 'tempGraoValue');
+        atualizarValor('umidadeGrao', 'umidadeGraoValue');
+        atualizarValor('tempExterna', 'tempExternaValue');
+        atualizarValor('umidadeExterna', 'umidadeExternaValue');
+
+        // Recalcular
+        calcularAeracaoEmTempoReal();
+
+        showNotification('Simulador resetado para valores padrão!', 'info');
+    }
+
+    // ... (as outras funções auxiliares permanecem as mesmas: atualizarStatusTempoReal, exibirResultado, atualizarBarrasProgresso, atualizarIndicadoresConformidade, atualizarParametrosCalculados, atualizarStatusRapido)
+
+    // Função para atualizar status em tempo real
+    function atualizarStatusTempoReal(resultado) {
+        const tempGrao = parseFloat(document.getElementById('tempGrao').value);
+        const umidadeGrao = parseFloat(document.getElementById('umidadeGrao').value);
+
+        // Temperatura do grão
+        const cardTempGrao = document.getElementById('cardTempGrao');
+        const statusTempGrao = document.getElementById('statusTempGrao');
+
+        if (tempGrao >= 35) {
+            cardTempGrao.className = 'parametro-card critico';
+            statusTempGrao.textContent = '⛔ Crítico';
+            statusTempGrao.className = 'text-danger';
+        } else if (tempGrao >= 25) {
+            cardTempGrao.className = 'parametro-card alerta';
+            statusTempGrao.textContent = '⚠️ Alerta';
+            statusTempGrao.className = 'text-warning';
+        } else {
+            cardTempGrao.className = 'parametro-card ideal';
+            statusTempGrao.textContent = '✅ Ideal';
+            statusTempGrao.className = 'text-success';
+        }
+
+        // Umidade do grão
+        const cardUmidadeGrao = document.getElementById('cardUmidadeGrao');
+        const statusUmidadeGrao = document.getElementById('statusUmidadeGrao');
+
+        if (umidadeGrao >= 18) {
+            cardUmidadeGrao.className = 'parametro-card critico';
+            statusUmidadeGrao.textContent = '⛔ Crítico';
+            statusUmidadeGrao.className = 'text-danger';
+        } else if (umidadeGrao >= 14) {
+            cardUmidadeGrao.className = 'parametro-card alerta';
+            statusUmidadeGrao.textContent = '⚠️ Alerta';
+            statusUmidadeGrao.className = 'text-warning';
+        } else {
+            cardUmidadeGrao.className = 'parametro-card ideal';
+            statusUmidadeGrao.textContent = '✅ Ideal';
+            statusUmidadeGrao.className = 'text-success';
+        }
+    }
+
+    // Função para exibir resultado
+    function exibirResultado(resultado, pontoOrvalho) {
+        const container = document.getElementById('resultadoSimulacao');
+
+        container.innerHTML = `
+            <div class="simulator-card resultado-pulse slide-in">
+                <div class="recomendacao-card recomendacao-${resultado.tipo.toLowerCase()}">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h4 class="fw-bold mb-1">${resultado.icone} ${resultado.titulo}</h4>
+                            <p class="text-muted mb-0">${resultado.descricao}</p>
+                        </div>
+                        <span class="status-indicator bg-${resultado.cor} text-white">
+                            ${resultado.tipo}
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="normativa-badge">${resultado.normativa}</span>
+                    </div>
+
+                    <h6 class="fw-bold mb-2">📋 Ações Recomendadas:</h6>
+                    <ul class="mb-4">
+                        ${resultado.acoes.map(acao => `<li>${acao}</li>`).join('')}
+                    </ul>
+
+                    <div class="row text-center">
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3 bg-white rounded border">
+                                <small class="text-muted d-block">Vazão Recomendada</small>
+                                <strong class="text-${resultado.cor} fs-5">${resultado.vazaoRecomendada.toFixed(1)} m³/min/ton</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3 bg-white rounded border">
+                                <small class="text-muted d-block">Tempo de Operação</small>
+                                <strong class="text-${resultado.cor}">${resultado.tempoOperacao}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Função para atualizar barras de progresso
+    function atualizarBarrasProgresso(tempGrao, umidadeGrao, tempExterna, umidadeExterna) {
+        // Temperatura grão (5-45°C)
+        const barraTempGrao = (tempGrao - 5) / 40 * 100;
+        document.getElementById('barraTempGrao').style.width = Math.min(barraTempGrao, 100) + '%';
+        document.getElementById('barraTempGrao').className =
+            `condicao-fill ${tempGrao >= 35 ? 'bg-danger' : tempGrao >= 25 ? 'bg-warning' : 'bg-success'}`;
+
+        // Umidade grão (8-25%)
+        const barraUmidadeGrao = (umidadeGrao - 8) / 17 * 100;
+        document.getElementById('barraUmidadeGrao').style.width = Math.min(barraUmidadeGrao, 100) + '%';
+        document.getElementById('barraUmidadeGrao').className =
+            `condicao-fill ${umidadeGrao >= 18 ? 'bg-danger' : umidadeGrao >= 14 ? 'bg-warning' : 'bg-success'}`;
+
+        // Temperatura externa (-5-45°C)
+        const barraTempExterna = (tempExterna + 5) / 50 * 100;
+        document.getElementById('barraTempExterna').style.width = barraTempExterna + '%';
+
+        // Umidade externa (20-95%)
+        const barraUmidadeExterna = (umidadeExterna - 20) / 75 * 100;
+        document.getElementById('barraUmidadeExterna').style.width = barraUmidadeExterna + '%';
+    }
+
+    // Função para atualizar indicadores de conformidade
+    function atualizarIndicadoresConformidade() {
+        const tempGrao = parseFloat(document.getElementById('tempGrao').value);
+        const umidadeGrao = parseFloat(document.getElementById('umidadeGrao').value);
+
+        const container = document.getElementById('indicadoresConformidade');
+
+        container.innerHTML = `
+            <div class="col-6 mb-3">
+                <div class="p-3 rounded border ${tempGrao <= 35 ? 'border-success bg-success bg-opacity-10' : 'border-danger bg-danger bg-opacity-10'}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold ${tempGrao <= 35 ? 'text-success' : 'text-danger'}">
+                            Temperatura
+                        </span>
+                        ${tempGrao <= 35 ? '✅' : '❌'}
+                    </div>
+                    <small class="text-muted">MAPA: ≤35°C</small>
+                </div>
+            </div>
+            <div class="col-6 mb-3">
+                <div class="p-3 rounded border ${umidadeGrao <= 14 ? 'border-success bg-success bg-opacity-10' : 'border-warning bg-warning bg-opacity-10'}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold ${umidadeGrao <= 14 ? 'text-success' : 'text-warning'}">
+                            Umidade
+                        </span>
+                        ${umidadeGrao <= 14 ? '✅' : '⚠️'}
+                    </div>
+                    <small class="text-muted">MAPA: ≤14%</small>
+                </div>
+            </div>
+        `;
+    }
+
+    // Função para atualizar parâmetros calculados
+    function atualizarParametrosCalculados(tempGrao, umidadeGrao, tempExterna, umidadeExterna, pontoOrvalho) {
+        if (!tempGrao) return;
+
+        const diferencialTemp = tempGrao - tempExterna;
+        const container = document.getElementById('parametrosCalculados');
+
+        container.innerHTML = `
+            <div class="col-6 mb-2">
+                <small class="text-muted">Ponto de Orvalho:</small><br>
+                <strong>${pontoOrvalho.toFixed(1)}°C</strong>
+            </div>
+            <div class="col-6 mb-2">
+                <small class="text-muted">Diferencial Temp.:</small><br>
+                <strong class="${diferencialTemp > 0 ? 'text-success' : 'text-danger'}">${diferencialTemp.toFixed(1)}°C</strong>
+            </div>
+            <div class="col-6 mb-2">
+                <small class="text-muted">Umidade Equilíbrio:</small><br>
+                <strong>${(umidadeGrao - 2).toFixed(1)}%</strong>
+            </div>
+            <div class="col-6 mb-2">
+                <small class="text-muted">Estado Externo:</small><br>
+                <strong>${umidadeExterna < 40 ? 'Seco' : umidadeExterna < 70 ? 'Moderado' : 'Úmido'}</strong>
+            </div>
+        `;
+    }
+
+    // Função para atualizar status rápido
+    function atualizarStatusRapido(resultado) {
+        const container = document.getElementById('statusRapido');
+
+        if (!resultado) {
+            container.innerHTML = `
+                <div class="text-center py-4">
+                    <i class="bi bi-arrow-repeat display-4 text-muted mb-3"></i>
+                    <p class="text-muted">Configure os parâmetros para ver o status</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="text-center">
+                <div class="display-6 ${'text-' + resultado.cor} mb-3">${resultado.icone}</div>
+                <h5 class="fw-bold ${'text-' + resultado.cor}">${resultado.tipo}</h5>
+                <p class="text-muted small">${resultado.descricao}</p>
+                <div class="mt-3">
+                    <span class="badge bg-${resultado.cor}">${resultado.vazaoRecomendada.toFixed(1)} m³/min/ton</span>
+                </div>
+            </div>
+        `;
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    AOS.init({
+      duration: 800,
+      once: true,
+      easing: 'ease-out-cubic'
+    });
+</script>
+{% endblock %}

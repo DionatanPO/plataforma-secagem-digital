@@ -1,417 +1,307 @@
 {% extends "websites/base.html" %}
-{% block title %}Portfólio{% endblock %}
+{% block title %}Portfólio - Secagem Digital{% endblock %}
 {% load static %}
+
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+<style>
+    :root { --v: #29913c; --l: #34a853; }
+    .bg-gradient-verde { background: linear-gradient(135deg, var(--v), var(--l)); }
+    .text-gradient {
+        background: linear-gradient(135deg, var(--v), var(--l));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .project-card {
+        background: white; border: none; border-radius: 32px;
+        overflow: hidden; box-shadow: 0 15px 45px rgba(41,145,60,.12);
+        transition: all .5s ease; height: 100%; display: flex; flex-direction: column;
+    }
+    .project-card:hover {
+        transform: translateY(-20px);
+        box-shadow: 0 35px 80px rgba(41,145,60,.25);
+    }
+    .project-img {
+        width: 100%; height: 380px; object-fit: cover;
+        transition: transform .4s ease;
+    }
+    .project-card:hover .project-img {
+        transform: scale(1.05);
+    }
+    .project-body {
+        padding: 2rem; flex-grow: 1; display: flex; flex-direction: column;
+    }
+    .team-badges {
+        display: flex; flex-wrap: wrap; gap: .5rem; margin-top: auto; padding-top: 1rem;
+    }
+    .team-badge {
+        background: rgba(41,145,60,.12); color: var(--v);
+        border: 2px solid var(--v); padding: .45rem .9rem;
+        border-radius: 50px; font-size: .82rem; font-weight: 600;
+        white-space: nowrap; transition: all .3s ease;
+    }
+    .team-badge:hover {
+        background: var(--v); color: white; transform: scale(1.05);
+    }
+    .inpi-card {
+        background: white; border-radius: 32px;
+        box-shadow: 0 15px 45px rgba(41,145,60,.12);
+        padding: 2.5rem;
+    }
+    .inpi-list li {
+        padding: 1.1rem 0; border-bottom: 1px solid rgba(41,145,60,.1);
+        font-size: 1.05rem;
+    }
+    .inpi-list li:last-child { border-bottom: none; }
+    .inpi-list strong { color: var(--v); }
+    @media (max-width: 768px) {
+        .project-img { height: 280px; }
+        .project-body { padding: 1.5rem; }
+        .team-badge { font-size: .78rem; padding: .4rem .8rem; }
+    }
+</style>
+
 <main class="flex-shrink-0">
-    <!-- Projects Section-->
-    <section class="">
-        <section class="bg-light py-5">
-            <div class="container px-5">
-                <div class="row gx-5 justify-content-center">
-                    <div class="col-xxl-8">
-                        <div class="text-center">
-                            <h4 class="display-7 fw-bolder"><span
-                                    class="text-gradient d-inline">Portfólio
-                        </span></h4>
 
+    <!-- HERO -->
+    <section class="py-5 py-xl-14 bg-light">
+        <div class="container px-5">
+            <div class="row justify-content-center text-center" data-aos="fade-up">
+                <div class="col-lg-10 col-xxl-8">
 
+                    <div class="text-center" data-aos="fade-up">
+                        <h1 class="titulo-verde-gigante">
+                            <span class="text-gradient">Portfólio</span>
+                        </h1>
+                    </div>
+                    <p class="lead text-muted">
+                        Soluções reais em <strong>IA, Flutter, Python e IoT</strong> que já transformam o agro e
+                        empresas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TODOS OS PROJETOS -->
+    <section class="py-5 py-xl-12 bg-white">
+        <div class="container px-5">
+            <div class="row g-5">
+
+                <!-- 1. Smart Secagem -->
+                <div class="col-lg-6 col-xxl-4" data-aos="fade-up">
+                    <div class="project-card">
+                        <img src="{% static 'assets/p12.png' %}" alt="Smart Secagem" class="project-img">
+                        <div class="project-body">
+                            <h4 class="text-gradient fw-bold">Smart Secagem</h4>
+                            <p class="text-muted small">Monitoramento em tempo real de grãos com sensores + app Flutter
+                                + API na nuvem. Economia de energia e qualidade garantida.</p>
+                            <div class="team-badges">
+                                <span class="team-badge">Equipe Secagem Digital</span>
+                            </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- 2. G-Grãos -->
+                <div class="col-lg-6 col-xxl-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="project-card">
+                        <img src="{% static 'assets/p1.png' %}" alt="G-Grãos" class="project-img">
+                        <div class="project-body">
+                            <h4 class="text-gradient fw-bold">G-Grãos</h4>
+                            <p class="text-muted small">Classificação oficial de soja, milho, feijão e sorgo (MAPA).
+                                Laudos PDF + gráficos + E-book incluso.</p>
+                            <div class="team-badges">
+                                <span class="team-badge">Daniel Emanuel</span>
+                                <span class="team-badge">Daniela Cabral</span>
+                                <span class="team-badge">Dionatan Pontes</span>
+                                <span class="team-badge">+6 membros</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Classifique Soja -->
+                <div class="col-lg-6 col-xxl-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="project-card">
+                        <img src="{% static 'assets/p2.png' %}" alt="Classifique Soja" class="project-img">
+                        <div class="project-body">
+                            <h4 class="text-gradient fw-bold">Classifique Soja</h4>
+                            <p class="text-muted small">App completo para classificação MAPA com fotos de defeitos,
+                                descontos automáticos e laudo PDF.</p>
+                            <div class="team-badges">
+                                <span class="team-badge">Dionatan Pontes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Tomateiro -->
+                <div class="col-lg-6 col-xxl-4" data-aos="fade-up">
+                    <div class="project-card">
+                        <img src="{% static 'assets/p3.png' %}" alt="Tomateiro" class="project-img">
+                        <div class="project-body">
+                            <h4 class="text-gradient fw-bold">Tomateiro$</h4>
+                            <p class="text-muted small">Gestão de custos de produção de tomate: insumos, mão de obra,
+                                relatórios e sincronização na nuvem.</p>
+                            <div class="team-badges">
+                                <span class="team-badge">Daniela Cabral</span>
+                                <span class="team-badge">Dionatan Pontes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Fiscaliza Iporá -->
+                <div class="col-lg-6 col-xxl-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="project-card">
+                        <img src="{% static 'assets/p4.png' %}" alt="Fiscaliza Iporá" class="project-img">
+                        <div class="project-body">
+                            <h4 class="text-gradient fw-bold">Fiscaliza Iporá-GO</h4>
+                            <p class="text-muted small">Denúncias ambientais com geolocalização, fotos e anonimato.
+                                Recebido diretamente por órgãos públicos.</p>
+                            <div class="team-badges">
+                                <span class="team-badge">Wayrone Klaiton</span>
+                                <span class="team-badge">Dionatan Pontes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Classifique Tomate -->
+                <div class="col-lg-6 col-xxl-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="project-card">
+                        <img src="{% static 'assets/p5.png' %}" alt="Classifique Tomate" class="project-img">
+                        <div class="project-body">
+                            <h4 class="text-gradient fw-bold">Classifique Tomate</h4>
+                            <p class="text-muted small">Gestão de lotes e classificação oficial de tomates com laudo
+                                automático.</p>
+                            <div class="team-badges">
+                                <span class="team-badge">Daniela Cabral</span>
+                                <span class="team-badge">Maria Gláucia</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Smart Flexões -->
+                <div class="col-lg-6 col-xxl-4" data-aos="fade-up">
+                    <div class="project-card">
+                        <img src="{% static 'assets/p6.png' %}" alt="Smart Flexões" class="project-img">
+                        <div class="project-body">
+                            <h4 class="text-gradient fw-bold">Smart Flexões</h4>
+                            <p class="text-muted small">Contador de flexões via sensor de proximidade do celular.
+                                Treinos guiados ou livres.</p>
+                            <div class="team-badges">
+                                <span class="team-badge">Dionatan Pontes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Meu Xodó Pet -->
+                <div class="col-lg-6 col-xxl-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="project-card">
+                        <img src="{% static 'assets/p7.png' %}" alt="Meu Xodó Pet" class="project-img">
+                        <div class="project-body">
+                            <h4 class="text-gradient fw-bold">Meu Xodó Pet</h4>
+                            <p class="text-muted small">Cartão de vacina digital + lembretes de remédios, banho e
+                                veterinário com notificações.</p>
+                            <div class="team-badges">
+                                <span class="team-badge">Dionatan Pontes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. Balcão Online -->
+                <div class="col-lg-6 col-xxl-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="project-card">
+                        <img src="{% static 'assets/p11.jpg' %}" alt="Balcão Online" class="project-img">
+                        <div class="project-body">
+                            <h4 class="text-gradient fw-bold">Balcão Online Rondonópolis</h4>
+                            <p class="text-muted small">Plataforma web de empregos com candidaturas, notificações e
+                                gestão completa.</p>
+                            <div class="team-badges">
+                                <span class="team-badge">Hiury Lima</span>
+                                <span class="team-badge">Wayrone Klaiton</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. Gestão Convênios -->
+                <div class="col-lg-6 col-xxl-4" data-aos="fade-up">
+                    <div class="project-card">
+                        <img src="{% static 'assets/p9.jpg' %}" alt="Gestão Convênios" class="project-img">
+                        <div class="project-body">
+                            <h4 class="text-gradient fw-bold">Gestão de Convênios MAPA</h4>
+                            <p class="text-muted small">Automação completa de formalização e execução de convênios do
+                                Ministério da Agricultura.</p>
+                            <div class="team-badges">
+                                <span class="team-badge">Daniela Cabral</span>
+                                <span class="team-badge">Wayrone Klaiton</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11. E-Book -->
+                <div class="col-lg-6 col-xxl-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="project-card">
+                        <img src="{% static 'assets/p10.jpg' %}" alt="E-Book G-Grãos" class="project-img">
+                        <div class="project-body">
+                            <h4 class="text-gradient fw-bold">E-Book G-Grãos</h4>
+                            <p class="text-muted small">Guia oficial de classificação vegetal (soja, milho, feijão,
+                                sorgo) com app G-Grãos.</p>
+                            <a href="https://pedroejoaoeditores.com.br?arquivo_download=2506" target="_blank"
+                               class="btn btn-success btn-sm mt-2">Baixar E-Book</a>
+                            <div class="team-badges">
+                                <span class="team-badge">Osvaldo Resende</span>
+                                <span class="team-badge">Daniel Emanuel</span>
+                                <span class="team-badge">+9 autores</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- REGISTROS INPI -->
+    <section class="py-5 py-xl-12 bg-gradient-verde text-white">
+        <div class="container px-5">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="fw-bold">Registros no INPI</h2>
+                <p class="opacity-90">10+ softwares protegidos por propriedade intelectual</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10" data-aos="fade-up" data-aos-delay="200">
+                    <div class="inpi-card">
+                        <ul class="inpi-list list-unstyled mb-0">
+                            <li><strong>G-Soja</strong> — BR512020000828-3 (12/05/2020)</li>
+                            <li><strong>SmartAve</strong> — BR512020002368-1 (17/06/2020)</li>
+                            <li><strong>G-Grãos</strong> — BR512020002863-2 (26/11/2020)</li>
+                            <li><strong>Site ML Soja</strong> — BR512021000113-3 (09/12/2020)</li>
+                            <li><strong>IGrãos Chatbot</strong> — BR512021000951-7 (26/04/2021)</li>
+                            <li><strong>Smart Hotel</strong> — BR512021000952-5 (01/05/2021)</li>
+                            <li><strong>TOMATEIRO$</strong> — BR512021001211-9 (19/05/2021)</li>
+                            <li><strong>Game Sustentabilidade</strong> — BR512021002524-5 (15/04/2021)</li>
+                            <li><strong>SisAeração ML</strong> — BR12022000174-8 (06/12/2021)</li>
+                            <li><strong>Banco de Talentos</strong> — BR512020000596-9 (01/01/2020)</li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </section>
-        <div class="container  mb-5">
-            <br>
-            <section class="showcase">
-                <div class="container-fluid p-0">
-                    <div class="row g-0">
-                        <div class="col-lg-6  text-white showcase-img">
-                            <img class="img-fluid" style="  border-radius: 1vw;" width="590"
-                                 src="{% static 'assets/p12.png' %}" alt="..."/>
-                        </div>
-                        <div class="col-lg-6 my-auto showcase-text">
-                            <br>
-                            <h5 class="fw-bolder">Aplicação Flutter: Smart Secagem Monitore grãos e sementes com segurança e
-                                eficiência</h5>
-
-                            <p class="text-muted" style="text-align: justify;">Você quer secar os seus grãos e sementes
-                                de um jeito novo e inteligente?
-                                Então você precisa conhecer a Secagem Digital, uma tecnologia que te ajuda a fazer isso
-                                com
-                                segurança e eficiência. Ela usa sensores digitais que medem a temperatura e a umidade do
-                                ar,
-                                e te mostra como está a secagem em tempo real. E assim, você pode ajustar a aeração
-                                automática dos secadores, que são do tipo estacionário e de fluxo misto. Isso economiza
-                                energia e preserva a qualidade do produto. E o melhor: você pode controlar tudo pelo
-                                celular, com o software da Secagem Digital. Ele te mostra os dados dos sensores, faz
-                                gráficos e relatórios, e te avisa se algo der errado. Você também pode acessar em uma
-                                API,
-                                na nuvem, de qualquer lugar do mundo. Assim, a Secagem Digital é uma tecnologia que faz
-                                a
-                                diferença no agronegócio, porque reduz custos, aumenta a produtividade e a segurança, e
-                                mantém a qualidade dos grãos.</p>
-
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">EQUIPE SECAGEM DIGITAL</span>
-                        </div>
-                    </div>
-                    <div class="row g-0 ">
-                        <div class="col-lg-6 order-lg-2 text-white showcase-img">
-                            <img class="img-fluid" style="  border-radius: 1vw;" width="590"
-                                 src="{% static 'assets/p1.png' %}" alt="..."/>
-                        </div>
-                        <div class="col-lg-6 order-lg-1 my-auto showcase-text ">
-                            <br>
-                            <h5 class="fw-bolder">G-grãos: Autonomia e confiança na hora de classificar grãos</h5>
-                            <p class="text-muted" style="text-align: justify;">O G-grãos é um aplicativo que te ajuda a
-                                classificar os grãos de Sorgo, Soja, Milho e Feijão de forma fácil e rápida. Ele segue
-                                as regras oficiais do MAPA e usa E-book "Aplicativo G-grãos: o passo a passo da
-                                classificação vegetal e de sua informatização. Soja, milho, feijão e sorgo" como
-                                referência. Com o aplicativo, você pode cadastrar e classificar as amostras, ver o laudo
-                                classificativo, calcular os descontos e os limites de tolerância, identificar o grupo,
-                                classe e tipo da amostra de Soja, gerar e compartilhar o laudo técnico em PDF, e
-                                analisar a qualidade dos grãos com gráficos. O G-grãos é um aplicativo que te dá mais
-                                autonomia e confiança na hora de classificar os grãos. </p>
-
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">JOÃO AREIS FERREIRA BARBOSA JÚNIOR</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">GUILHERME MATOS ATAIDES</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DANIEL EMANUEL CABRAL DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DANIELA CABRAL DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">JOSÉ CARLOS DE SOUSA JÚNIOR</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DIONATAN PONTES DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">MARIA GLÁUCIA DOURADO FURQUIM</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">UENDER CARLOS BARBOSA;</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">ALCÍDIA CRISTINA RODRIGUES OLIVEIRA BERGLAND</span>
-
-                        </div>
-                    </div>
-                    <div class="row g-0">
-                        <div class="col-lg-6  text-white showcase-img">
-                            <img class="img-fluid" style="  border-radius: 1vw;" width="590"
-                                 src="{% static 'assets/p2.png' %}" alt="..."/>
-                        </div>
-                        <div class="col-lg-6 my-auto showcase-text">
-                            <br>
-                            <h5 class="fw-bolder">Classifique Soja: Classifique a soja segundo as normas do MAPA</h5>
-                            <p class="text-muted" style="text-align: justify;">O Classifique Soja é o aplicativo que te
-                                aproxima do conhecimento da classificação do grão de soja segundo as normas do MAPA e
-                                sem depender de terceiros. Ele é destinado tanto para os classificadores legais nas
-                                unidades classificadoras ou nas propriedades rurais, quanto para qualquer pessoa que
-                                queira aprender e realizar a classificação de soja. Com o Classifique Soja, você pode:
-                                a) Amostrar o caminhão e classificar as amostras de soja com facilidade e precisão; b)
-                                Calcular os descontos aplicados à carga e verificar os limites de tolerância aceitos
-                                pelo MAPA; c) Identificar o grupo, classe e tipo da amostra de soja conforme a
-                                legislação vigente do MAPA; d) Inserir fotos de cada defeito encontrado, que servem de
-                                prova documental para posterior análise; e) Ver gráficos que otimizam a sua análise,
-                                destacando as diferenças e semelhanças entre os critérios observados na sua
-                                classificação; f) Emitir e compartilhar o laudo técnico em PDF, que pode ser enviado via
-                                WhatsApp ou E-mail; g) Acessar informações completas e atualizadas sobre a
-                                classificação; h) E, por fim, cadastrar diretores, produtores, unidades classificadoras,
-                                identificação de caminhão, proprietário da carga, peso da carga, comprador e data de
-                                cadastro. </p>
-
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DIONATAN PONTES DE OLIVEIRA</span>
-                        </div>
-                    </div>
-                    <div class="row g-0 ">
-                        <div class="col-lg-6 order-lg-2 text-white showcase-img">
-                            <img class="img-fluid" style="  border-radius: 1vw;" width="590"
-                                 src="{% static 'assets/p3.png' %}" alt="..."/>
-                        </div>
-                        <div class="col-lg-6 order-lg-1 my-auto showcase-text ">
-                            <br>
-                            <h5 class="fw-bolder">Tomateiro: Gerencie os custos de produção do tomate</h5>
-                            <p class="text-muted" style="text-align: justify;">O Tomateiro é um aplicativo para
-                                gerenciar os custos de produção do tomate que te dá mais controle e confiança na hora de
-                                produzir tomate para consumo fresco. Com o Tomateiro, você pode armazenar e analisar os
-                                dados das operações manuais, mecanizadas, insumos e administração, que influenciam nos
-                                custos por ciclo de produção. Assim, você pode tomar decisões mais assertivas e
-                                rentáveis para o seu negócio agrícola. O Tomateiro também te oferece recursos como: a)
-                                Cálculo do custo total e do custo unitário por quilo de tomate produzido; b) Comparação
-                                dos custos de produção com os preços de mercado; c) Geração de relatórios e gráficos que
-                                facilitam a visualização e a interpretação dos dados; d) Exportação dos dados para
-                                planilhas eletrônicas ou outros aplicativos; e) Sincronização dos dados com o servidor
-                                do projeto, que permite o acesso remoto e a segurança das informações.</p>
-
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">ABADIA DOS REIS NASCIMENTO</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">CLAYTON LUIZ DE MELO NUNES</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DANIELA CABRAL DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DIONATAN PONTES DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">MARIA GLÁUCIA DOURADO FURQUIM</span>
-
-                        </div>
-                    </div>
-                    <div class="row g-0">
-                        <div class="col-lg-6  text-white showcase-img">
-                            <img class="img-fluid" style="  border-radius: 1vw;" width="600"
-                                 src="{% static 'assets/p4.png' %}" alt="..."/>
-                        </div>
-                        <div class="col-lg-6 my-auto showcase-text">
-                            <br>
-                            <h5 class="fw-bolder">Fiscaliza Iporá-GO: Conecta você aos órgãos ambientais da sua
-                                região</h5>
-                            <p class="text-muted" style="text-align: justify;">O “Fiscaliza Iporá” é um app para
-                                celulares Android que te ajuda a denunciar crimes ambientais na sua cidade ou em
-                                qualquer outra do Brasil. Você pode enviar suas denúncias por e-mail. O app é fácil de
-                                usar e tem uma interface bonita e intuitiva. Você só precisa informar seu nome na
-                                primeira vez que abrir o app, e depois seguir quatro passos para fazer sua denúncia: 1)
-                                Preencha os dados da denúncia (nome completo, geolocalização, endereço completo, e-mail,
-                                número de WhatsApp, descrição e data da ocorrência); 2) Anexe os arquivos que comprovem
-                                o crime ambiental, como fotos, vídeos e áudios; 3) Revise as informações, escolha se
-                                quer se identificar ou não e faça as alterações que quiser; 4) Envie a denúncia para o
-                                órgão ambiental. As denúncias no e-mail são recebidas por gestores ambientais, como
-                                servidores da Secretaria Municipal de Meio Ambiente e também por vereadores da cidade
-                                que fiscalizam a resolução das denúncias. </p>
-
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">ELIANA TIBA GOMES GRANDE</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DANIEL EMANUEL CABRAL DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DANIELA CABRAL DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DIONATAN PONTES DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">WAYRONE KLAITON LUIZ SILVA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">HAIHANI SILVA PASSOS</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">ANA CAROLINA RIBEIRO AGUIAR</span>
-                        </div>
-                    </div>
-                    <div class="row g-0 ">
-                        <div class="col-lg-6 order-lg-2 text-white showcase-img">
-                            <img class="img-fluid" style="  border-radius: 1vw;" width="590"
-                                 src="{% static 'assets/p5.png' %}" alt="..."/>
-                        </div>
-                        <div class="col-lg-6 order-lg-1 my-auto showcase-text ">
-                            <br>
-                            <h5 class="fw-bolder">Classifique Tomate: Simplifique a classificação dos tomates</h5>
-                            <p class="text-muted" style="text-align: justify;">
-                                O Classifique Tomate é um aplicativo que te ajuda a classificar os tomates de forma
-                                fácil e rápida. Com o app, você pode controlar a sua produção por meio da gestão de
-                                lotes e amostras. Você também pode ver os defeitos leves, graves, grupo, tipo e classe
-                                dos tomates, e receber o laudo de classificação. O laudo te dá mais confiança e
-                                transparência para tomar as melhores decisões sobre a sua produção. O Classifique Tomate
-                                é um aplicativo que contribui com a classificação de tomates e facilita o trabalho dos
-                                produtores rurais e dos classificadores legais.
-                            </p>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DANIELA CABRAL DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DIONATAN PONTES DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">MARIA GLÁUCIA DOURADO FURQUIM</span>
-                        </div>
-                    </div>
-                    <div class="row g-0">
-                        <div class="col-lg-6  text-white showcase-img">
-                            <img class="img-fluid" style="  border-radius: 1vw;" width="590"
-                                 src="{% static 'assets/p6.png' %}" alt="..."/>
-                        </div>
-                        <div class="col-lg-6 my-auto showcase-text">
-                            <br>
-                            <h5 class="fw-bolder">Smart Flexões: O aplicativo que conta suas flexões</h5>
-                            <p class="text-muted" style="text-align: justify;">
-                                O Smart Flexões é um app que usa o sensor de proximidade do seu celular para contar
-                                quantas flexões você faz. As flexões são um exercício que trabalha vários músculos. Você
-                                pode escolher entre dois tipos de treino: um com séries e quantidades predefinidas, que
-                                variam de acordo com o seu nível de condicionamento físico, e outro livre, sem limite de
-                                tempo ou repetições, que permite que você faça o seu próprio ritmo. O app é ideal para
-                                quem quer se exercitar em casa, sem precisar de equipamentos ou supervisão. Você só
-                                precisa do seu celular e de um espaço adequado para fazer as flexões. O Smart Flexões é
-                                um app que te ajuda a ficar em forma e a cuidar da sua saúde com um exercício simples e
-                                eficaz. Baixe o app e comece a fazer flexões hoje mesmo!
-                            </p>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DIONATAN PONTES DE OLIVEIRA</span>
-                        </div>
-                    </div>
-                    <div class="row g-0 ">
-                        <div class="col-lg-6 order-lg-2 text-white showcase-img">
-                            <img class="img-fluid" style="  border-radius: 1vw;" width="590"
-                                 src="{% static 'assets/p7.png' %}" alt="..."/>
-                        </div>
-                        <div class="col-lg-6 order-lg-1 my-auto showcase-text ">
-                            <br>
-                            <h5 class="fw-bolder">Meu Xodó Pet: O app que cuida do seu pet</h5>
-                            <p class="text-muted" style="text-align: justify;">
-                                Quer administrar remédios, dar banho ou revacinar seu pet? O Meu Xodó Pet é um app
-                                gratuito que te ajuda a gerenciar a saúde e o bem-estar do seu pet. Com ele, você pode
-                                cadastrar seus pets e controlar seu histórico de vacinas pelo cartão de vacina digital,
-                                que evita a perda ou o esquecimento das datas de revacinação. Você também pode criar
-                                lembretes para administrar remédios, dar banho ou levar seu pet ao veterinário e ainda,
-                                receber notificações com as informações que você definiu. O app tem uma interface
-                                simples e prática, que facilita o seu dia a dia. Baixe o app e descubra como o Meu Xodó
-                                Pet pode ser o seu melhor amigo na hora de cuidar do seu pet.
-                            </p>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DIONATAN PONTES DE OLIVEIRA</span>
-                        </div>
-                    </div>
-                    <div class="row g-0">
-                        <div class="col-lg-6  text-white showcase-img">
-                            <img class="img-fluid" style="  border-radius: 1vw;" width="590"
-                                 src="{% static 'assets/p11.jpg' %}" alt="..."/>
-                        </div>
-                        <div class="col-lg-6 my-auto showcase-text">
-                            <br>
-                            <h5 class="fw-bolder">Balcão Online de Empregos Rondonópolis: Conecta você ao mercado de
-                                trabalho</h5>
-                            <p class="text-muted" style="text-align: justify;">
-                                O Balcão Online de Empregos - Rondonópolis é um aplicativo web que te conecta ao mercado
-                                de trabalho na sua cidade. Com ele, você pode ver as vagas disponíveis, se candidatar,
-                                enviar currículos e arquivos, receber notificações, marcar entrevistas e acompanhar o
-                                processo seletivo. Os empregadores podem publicar as vagas, ver os candidatos, avaliar,
-                                baixar, enviar mensagens e solicitar a contratação. O administrador pode supervisionar e
-                                gerenciar todo o processo e os dados do sistema. O Balcão Online de Empregos -
-                                Rondonópolis é um site que te dá mais confiança, transparência e proximidade na hora de
-                                buscar ou oferecer um emprego.
-                            </p>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DANIELA CABRAL DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">HIURY LIMA DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">WAYRONE KLAITON LUIZ SILVA</span>
-                        </div>
-                    </div>
-                    <div class="row g-0">
-                        <div class="col-lg-6 order-lg-2 text-white showcase-img">
-                            <img class="img-fluid" style="  border-radius: 1vw;" width="590"
-                                 src="{% static 'assets/p9.jpg' %}" alt="..."/>
-                        </div>
-                        <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-                            <br>
-                            <h5 class="fw-bolder">Plataforma de Gestão de Convênios: O site que simplifica os convênios
-                                do MAPA</h5>
-                            <p class="text-muted" style="text-align: justify;">O objetivo do projeto é desenvolver um
-                                sistema para automatizar o processo de formalização dos convênios do MAPA para o tornar
-                                organizado, prático e com disponibilidade das informações a qualquer momento.
-                                Sistema de informações gerenciais consistem no desenvolvimento e no uso de sistemas de
-                                informação que auxiliam as instituições a alcançar suas metas e objetivos. Diante desse
-                                contexto, a PGC - Programa de gestão e convênios do MAPA - Ministério da Agricultura e
-                                Pecuária, auxiliará nas tomadas de
-                                decisões quanto às etapas do processo de Formalização e execução.
-                            </p>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DANIELA CABRAL DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DIONATAN PONTES DE OLIVEIRA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">WAYRONE KLAITON LUIZ SILVA</span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">HAIHANI SILVA PASSOS</span>
-                        </div>
-                    </div>
-
-                    <div class="row g-0 ">
-                        <div class="col-lg-6  text-white showcase-img">
-                            <img class="img-fluid" style="  border-radius: 1vw;" width="590"
-                                 src="{% static 'assets/p10.jpg' %}" alt="..."/>
-                        </div>
-                        <div class="col-lg-6  my-auto showcase-text ">
-                            <br>
-                            <h5 class="fw-bolder">E-Book “Aplicativo G-Grãos: O Passo a Passo da Classificação Vegetal e
-                                de Sua Informatização. Soja, Milho, Feijão E Sorgo”</h5>
-
-                            <p class="text-muted" style="text-align: justify;">
-                                O Ebook “Aplicativo G-grãos: o passo a passo da classificação vegetal e de sua
-                                informatização. Soja, milho, feijão e sorgo” é um guia prático e didático para quem quer
-                                aprender a usar o aplicativo G-grãos, uma solução tecnológica que facilita a
-                                classificação de grãos conforme as normas do MAPA. Com esse ebook, você vai conhecer os
-                                conceitos e as técnicas para avaliar a qualidade dos grãos e entender como fazer a
-                                amostragem, a homogeneização, o quarteamento, a determinação de matéria estranha e
-                                impureza, o teor de água, o exame do grão, o enquadramento dos grãos, assim como gerar
-                                laudos confiáveis e transparentes por meio do uso do aplicativo G-grãos. O ebook é
-                                escrito por especialistas na área e publicado pela Pedro & João Editores, uma editora
-                                comprometida com a divulgação de conhecimento científico e tecnológico.
-                            </p>
-                            <div class="d-flex flex-row-reverse">
-                                <a class="btn btn-success"
-                                   href="https://pedroejoaoeditores.com.br?arquivo_download=2506" target="_blank">Abrir
-                                    o e-book</a>
-                            </div>
-
-                            <br>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DANIEL EMANUEL CABRAL DE OLIVEIRA </span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DANIELA CABRAL DE OLIVEIRA </span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">JOSÉ CARLOS DE SOUSA JÚNIOR </span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">MARIA GLÁUCIA DOURADO FURQUIM </span>
-                            <span style="padding: 7px;"
-                                  class="badge rounded-pill alert alert-success">OSVALDO RESENDE </span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DIONATAN PONTES DE OLIVEIRA </span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">GUILHERME MATOS ATAIDES </span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">WAYRONE KLAITON LUIZ SILVA </span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">UENDER CARLOS BARBOSA </span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">ALCÍDIA CRISTINA RODRIGUÊS BERGLAND </span>
-                            <span style="padding: 7px;" class="badge rounded-pill alert alert-success">DANIHANNE BORGES E SILVA </span>
-
-                        </div>
-                    </div>
-                </div>
-            </section>
         </div>
     </section>
-    <!-- Call to action section-->
-    <section class="py-5  text-white" style="background-color: #4e524e;">
-        <div class="container px-5 my-5">
-            <section>
-                <div class="text-center">
-                    <div class="d-inline  mb-4">
-                        <h5 class=" fw-bolder mb-0">Registros de Software no INPI - Instituto Nacional da Propriedade
-                            Industrial</h5>
-                    </div>
-                </div>
-                <br>
-                <div class="text-justify">
-                    <div class="card shadow border-0 rounded-4 mb-5">
-                        <div class="card-body p-5">
-                            <div class="row align-items-center gx-5">
-                                <div class="col">
-                                    <div><p class="text-muted" style="text-align: justify;">
-                                        Título: "G-Soja - Classificação de Grãos Soja"; patente: Programa de Computador.
-                                        Número do registro: BR512020000828-3,
-                                        data de registro: 12/05/2020.
 
-                                        <br><br>Título: "SmartAve - Aplicativo de Monitoramento Avícola"; patente:
-                                        Programa
-                                        de
-                                        Computador. Número do registro:
-                                        BR512020002368-1, data de registro: 17/06/2020.
-
-                                        <br><br>Título: "G-Grãos - Aplicativo de Classificação de Soja, Milho, Feijão e
-                                        Sorgo";
-                                        patente: Programa de Computador. Número do registro:
-                                        BR512020002863-2, data de registro: 26/11/2020.
-
-                                        <br><br>Título: "Site Web para Classificação de Soja com Aprendizado de
-                                        Máquina";
-                                        patente:
-                                        Programa de Computador. Número do registro:
-                                        BR512021000113-3, data de registro: 09/12/2020.
-
-                                        <br><br>Título: "IGrãos Chatbot para Classificação de Soja"; patente: Programa
-                                        de
-                                        Computador. Número do registro: BR512021000951-7,
-                                        data de registro: 26/04/2021.
-
-                                        <br><br>Título: "Smart Hotel - Aplicativo para hotéis"; patente: Programa de
-                                        Computador.
-                                        Número do registro: BR512021000952-5, data de registro: 01/05/2021.
-
-                                        <br><br>Título: "TOMATEIRO$ - Aplicativo de Gerenciamento de Custos de
-                                        Produção";
-                                        patente:
-                                        Programa de Computador. Número do registro: BR512021001211-9, data de registro:
-                                        19/05/2021.
-
-                                        <br><br>Título: "O mundo da sustentabilidade: Game infantil educativo sobre
-                                        práticas
-                                        sustentáveis"; patente: Programa de Computador. Número do registro:
-                                        BR512021002524-5, data de registro: 15/04/2021.
-
-                                        <br><br>Título: "SisAeração - WebApp para Sistema de Aeração utilizando
-                                        Aprendizado
-                                        de
-                                        Máquina"; patente: Programa de Computador. Número do registro: BR12022000174-8,
-                                        data
-                                        de registro: 06/12/2021.
-
-                                        <br><br>Título: "Sistema Banco Virtual de Talentos Estudantis"; patente:
-                                        Programa de
-                                        Computador. Número do registro: BR512020000596-9, data de registro: 01/01/2020.
-
-
-                                    </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </section>
 </main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init({ duration: 1000, once: true, easing: 'ease-out-cubic' });
+</script>
 {% endblock %}

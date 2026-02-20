@@ -1,94 +1,297 @@
 {% extends "websites/base.html" %}
-{% block title %}Contato{% endblock %}
+{% block title %}Contato - Secagem Digital{% endblock %}
 {% load static %}
+
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+<style>
+    :root {
+        --v: #29913c;
+        --l: #34a853;
+        --d: #1e6b2d;
+    }
+    .bg-gradient-verde { background: linear-gradient(135deg, var(--v), var(--l)); }
+    .text-gradient {
+        background: linear-gradient(135deg, var(--v), var(--l));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* CORREÇÃO DEFINITIVA DO FUNDO VERDE NA NAVBAR */
+    .navbar .nav-link i,
+    .navbar .active i,
+    .navbar .current i,
+    .navbar i.bi {
+        background: none !important;
+        color: inherit !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .hero-title {
+        font-size: clamp(2.8rem, 8vw, 5rem);
+        font-weight: 900;
+        line-height: 1.05;
+        letter-spacing: -1.5px;
+    }
+
+    .social-float {
+        width: 70px; height: 70px;
+        border-radius: 50%;
+        background: rgba(41,145,60,.1);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.9rem; color: var(--v);
+        transition: all .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 15px 35px rgba(41,145,60,.2);
+        border: 3px solid transparent;
+        flex-shrink: 0;
+    }
+    .social-float:hover {
+        background: var(--v);
+        color: white;
+        transform: translateY(-15px) scale(1.25) rotate(8deg);
+        border-color: var(--l);
+        box-shadow: 0 30px 60px rgba(41,145,60,.4);
+    }
+
+    .email-card {
+        background: white;
+        border-radius: 40px;
+        padding: 3rem 2rem;
+        box-shadow: 0 30px 80px rgba(41,145,60,.22);
+        position: relative;
+        overflow: hidden;
+        transition: all .5s ease;
+    }
+    .email-card::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+        background: linear-gradient(90deg, var(--v), var(--l));
+    }
+    .email-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 45px 100px rgba(41,145,60,.3);
+    }
+
+    .email-text {
+        font-size: clamp(1.3rem, 4vw, 1.8rem);
+        font-weight: 800;
+        color: var(--v);
+        letter-spacing: 0.8px;
+        word-break: break-all;
+        padding: 0.5rem;
+    }
+
+    .email-copy {
+        background: linear-gradient(135deg, var(--v), var(--l));
+        color: white; padding: .9rem 2.2rem;
+        border-radius: 50px; font-weight: 700;
+        cursor: pointer; transition: all .3s ease;
+        box-shadow: 0 10px 30px rgba(41,145,60,.3);
+        font-size: 1rem;
+        white-space: nowrap;
+    }
+    .email-copy:hover {
+        transform: scale(1.08);
+        box-shadow: 0 15px 40px rgba(41,145,60,.4);
+    }
+
+    .contact-img {
+        border-radius: 32px;
+        box-shadow: 0 40px 100px rgba(0,0,0,.3);
+        border: 12px solid white;
+        transition: all .6s ease;
+        max-width: 100%;
+        height: auto;
+    }
+    .contact-img:hover {
+        transform: scale(1.04) rotate(1deg);
+        box-shadow: 0 60px 140px rgba(0,0,0,.4);
+    }
+
+    .pulse-badge { animation: pulse 3s infinite; }
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    /* RESPONSIVIDADE PERFEITA */
+    @media (max-width: 992px) {
+        .hero-title { font-size: 3.8rem; }
+        .social-float { width: 65px; height: 65px; font-size: 1.7rem; }
+    }
+
+    @media (max-width: 768px) {
+        .hero-title { font-size: 3.2rem; letter-spacing: -1px; }
+        .social-float {
+            width: 58px; height: 58px; font-size: 1.5rem;
+        }
+        .email-card {
+            padding: 2.5rem 1.8rem;
+            border-radius: 32px;
+        }
+        .contact-img {
+            border: 10px solid white;
+            border-radius: 28px;
+        }
+        .row.gx-5 { --bs-gutter-x: 2rem; }
+    }
+
+    @media (max-width: 576px) {
+        .hero-title {
+            font-size: 2.8rem;
+            line-height: 1.1;
+        }
+        .lead.fs-3 { font-size: 1.1rem !important; }
+        .social-float {
+            width: 54px; height: 54px; font-size: 1.4rem;
+        }
+        .d-flex.gap-5 {
+            gap: 1rem !important;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .email-card {
+            padding: 2rem 1.5rem;
+            margin: 0 1rem;
+        }
+        .email-text {
+            font-size: 1.25rem;
+            padding: 1rem;
+            background: rgba(41,145,60,.05);
+            border-radius: 16px;
+        }
+        .contact-img {
+            border: 8px solid white;
+            border-radius: 24px;
+            margin-top: 2rem;
+        }
+        .py-5.py-xl-16 { padding: 4rem 0 !important; }
+        .py-5.py-xl-14 { padding: 3.5rem 0 !important; }
+    }
+
+    @media (max-width: 380px) {
+        .hero-title { font-size: 2.5rem; }
+        .social-float { width: 50px; height: 50px; font-size: 1.3rem; }
+        .email-copy { padding: .8rem 1.8rem; font-size: .95rem; }
+    }
+</style>
+
 <main class="flex-shrink-0">
-    <section class="">
 
-        <section class="bg-light py-5">
-            <div class="container px-5">
-                <div class="row gx-5 justify-content-center">
-                    <div class="col-xxl-8">
-                        <div class="text-center">
-                            <h4 class="display-7 fw-bolder"><span
-                                    class="text-gradient d-inline">Contato
-                        </span></h4>
-                            <p class="text-muted"> Você tem alguma pergunta? Por favor, não hesite em nos contatar
-                                diretamente. Nossa equipe entrará em contato
-                                com você para ajudá-lo.</p>
+<!-- HERO CONTATO -->
+<section class="py-5 py-xl-16 bg-light">
+    <div class="container px-5">
+        <div class="row justify-content-center text-center" data-aos="fade-up">
+            <div class="col-lg-10 col-xxl-8">
+                <div class="text-center" data-aos="fade-up">
+                    <h1 class="titulo-verde-gigante">
+                        <span class="text-gradient">Fale com a gente</span>
+                    </h1>
+                </div>
+                <p class="lead text-muted mb-5 fs-3 fw-medium">
+                    Orçamento · Dúvida · Parceria <br>
+                    <strong>Resposta em até 12h. Sempre.</strong>
+                </p>
 
-                        </div>
-                        <div class="d-flex justify-content-center fs-2 gap-4">
-                            <a class="text-gradient"
-                               href="https://www.instagram.com/secagemdigital/?igshid=YzVkODRmOTdmMw%3D%3D"><i
-                                    class="bi bi-instagram"></i></a>
-                            <a class="text-gradient"
-                               href="https://www.facebook.com/profile.php?id=61554660220613"><i
-                                    class="bi bi-facebook"></i></a>
-                            <a class="text-gradient"
-                               href="https://www.linkedin.com/posts/secagem-digital_secagemdigital-inova%C3%A7%C3%A3o-criatividade-activity-7143685719008473088-bQhI/?originalSubdomain=pt"><i
-                                    class="bi bi-linkedin"></i></a>
-
-                        </div>
-                    </div>
+                <!-- REDES SOCIAIS COM WRAP AUTOMÁTICO -->
+                <div class="d-flex justify-content-center gap-5 mb-5 flex-wrap">
+                    <a href="https://www.instagram.com/secagemdigital/" target="_blank" class="social-float" aria-label="Instagram">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=61554660220613" target="_blank" class="social-float" aria-label="Facebook">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/secagem-digital" target="_blank" class="social-float" aria-label="LinkedIn">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                    <a href="https://wa.me/5547999999999" target="_blank" class="social-float pulse-badge" aria-label="WhatsApp">
+                        <i class="bi bi-whatsapp"></i>
+                    </a>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
-        <header class="py-5">
-            <div class="container px-5 pb-5">
-                <div class="row gx-5 align-items-center">
-                    <div class="col-xxl-5 d-flex justify-content-center">
-                        <!-- Header text content-->
-                        <div class="text-center text-xxl-start">
-                            <span class="text-gradient d-inline">Entre em contato pelo nosso e-mail</span>
-                            <div class="badge bg-gradient-primary-to-secondary text-white ">
-                                <div class="text-uppercase ">secagemdigitalsilotech@gmail.com</div>
-                            </div>
+<!-- E-MAIL + FOTO -->
+<section class="py-5 py-xl-14 bg-white">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center">
 
-                        </div>
+            <!-- CARD E-MAIL -->
+            <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-right">
+                <div class="email-card text-center">
+                    <div class="mb-4">
+                        <i class="bi bi-envelope-heart-fill display-1 text-gradient"></i>
                     </div>
-                    <div class="col-xxl-7">
-                        <!-- Header profile picture-->
-                        <div class="d-flex justify-content-center mt-5 mt-xxl-0">
-                            <div class="profile bg-gradient-primary-to-secondary">
-                                <!-- TIP: For best results, use a photo with a transparent background like the demo example below-->
-                                <!-- Watch a tutorial on how to do this on YouTube (link)-->
-                                <img class="profile-img" src="{% static 'assets/fundo2.jpg' %}" alt="...">
-
-                            </div>
-                        </div>
+                    <h2 class="fw-bold mb-4 display-6">
+                        Nos mande um <span class="text-gradient">e-mail</span>
+                    </h2>
+                    <p class="text-muted mb-5 lead">
+                        Resposta personalizada em até <strong>12 horas</strong>.<br>
+                        Promessa de agrodev.
+                    </p>
+                    <div class="email-text mb-4" id="emailText">
+                        secagemdigitalsilotech@gmail.com
                     </div>
+                    <button class="email-copy" onclick="copyEmail()">
+                        <i class="bi bi-copy me-2"></i>Copiar e-mail
+                    </button>
+                    <p class="text-success small mt-3 fw-bold" id="copyMsg" style="display:none;">
+                        Copiado com sucesso!
+                    </p>
                 </div>
             </div>
-        </header>
 
-        <!--        <div class="container px-5 pb-5">-->
-        <!--            <div class="row gx-5 align-items-center">-->
-        <!--                <div class="col-xxl-5">-->
-        <!--                    &lt;!&ndash; Header text content&ndash;&gt;-->
-        <!--                    <div class="text-center text-xxl-start">-->
-        <!--                        <div class="badge bg-gradient-primary-to-secondary text-white mb-4">-->
-        <!--                            <div class="text-uppercase">Entre em contato pelo nosso e-mail</div>-->
-        <!--                        </div>-->
-        <!--                        <div class="fs-3 fw-light text-muted">secagemdigitalsilotech@gmail.com</div>-->
+            <!-- FOTO -->
+            <div class="col-lg-6 order-1 order-lg-2 text-center mb-4 mb-lg-0" data-aos="fade-left" data-aos-delay="200">
+                <img src="{% static 'assets/fundo2.jpg' %}" alt="Equipe Secagem Digital" class="contact-img img-fluid">
+            </div>
+        </div>
+    </div>
+</section>
 
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--                <div class="col-xxl-5">-->
-        <!--                    &lt;!&ndash; Header profile picture&ndash;&gt;-->
-        <!--                    <div class="d-flex justify-content-center mt-5 mt-xxl-0">-->
-
-        <!--                        <img class="profile-img" style="  border-radius: 5vw;" width="450" height="auto"-->
-        <!--                             src="{% static 'assets/fundo2.jpg' %}"-->
-        <!--                             alt="...">-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-
-    </section>
-
+<!-- HORÁRIOS -->
+<section class="py-5 py-xl-12 bg-gradient-verde text-white">
+    <div class="container px-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center">
+                    <i class="bi bi-clock-history display-1 mb-4 opacity-75"></i>
+                    <h2 class="fw-bold display-5 mb-4">Horário de Atendimento</h2>
+                    <p class="fs-3 mb-4">
+                        Seg–Sex: <strong>8h às 19h</strong><br>
+                        Sábado: <strong>9h às 14h</strong>
+                    </p>
+                    <p class="opacity-90 fs-5 mb-5">
+                        Fora do horário? Manda no WhatsApp que a gente te responde na hora!
+                    </p>
+<!--                    <a href="https://wa.me/5547999999999" target="_blank" class="btn btn-light btn-lg px-5 py-3 fw-bold shadow-lg">-->
+<!--                        <i class="bi bi-whatsapp me-3"></i>Falar agora no WhatsApp-->
+<!--                    </a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 </main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1200,
+        once: true,
+        easing: 'ease-out-cubic',
+        offset: 80
+    });
+
+    function copyEmail() {
+        navigator.clipboard.writeText('secagemdigitalsilotech@gmail.com');
+        const msg = document.getElementById('copyMsg');
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 2000);
+    }
+</script>
 {% endblock %}

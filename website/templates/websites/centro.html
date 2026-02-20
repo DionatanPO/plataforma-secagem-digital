@@ -1,0 +1,193 @@
+{% extends "websites/base.html" %}
+{% block title %}AgroHub UniRV Rio Verde - Secagem Digital{% endblock %}
+{% load static %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+<style>
+    :root { --v: #29913c; --l: #34a853; }
+    .bg-gradient-verde { background: linear-gradient(135deg, var(--v), var(--l)); }
+    .text-gradient {
+        background: linear-gradient(135deg, var(--v), var(--l));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .card-process {
+        background: white; border: none; border-radius: 32px;
+        overflow: visible !important;
+        position: relative;
+        box-shadow: 0 15px 45px rgba(41,145,60,.12);
+        transition: all .5s ease;
+        padding-top: 60px;
+    }
+    .card-process:hover {
+        transform: translateY(-18px);
+        box-shadow: 0 35px 80px rgba(41,145,60,.22);
+    }
+    .icon-float {
+        width: 100px; height: 100px; border-radius: 50%;
+        background: linear-gradient(135deg, var(--v), var(--l));
+        display: flex; align-items: center; justify-content: center;
+        color: white; font-size: 2.6rem;
+        box-shadow: 0 20px 40px rgba(41,145,60,.35);
+        position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
+        z-index: 10; transition: all .4s ease;
+    }
+    .card-process:hover .icon-float { transform: translateX(-50%) translateY(-8px) scale(1.1); }
+    .process-body { padding: 20px 30px 40px; text-align: center; }
+    .badge-step {
+        background: rgba(41,145,60,.12); color: var(--v);
+        border: 2px solid var(--v); padding: .5rem 1.2rem;
+        border-radius: 50px; font-weight: 800; font-size: .9rem;
+        letter-spacing: 0.5px;
+    }
+</style>
+
+<main class="flex-shrink-0">
+
+    <!-- HERO -->
+    <section class="py-5 py-xl-12 bg-light">
+        <div class="container px-5 text-center" data-aos="fade-up">
+
+            <!-- LOGO DO AGROHUB -->
+            <img src="{% static 'assets/logo_centro.svg' %}"
+                 alt="Logo AgroHub UniRV"
+                 class="img-fluid mb-4"
+                 style="max-width: 220px; filter: drop-shadow(0 4px 8px rgba(0,0,0,.15));">
+
+            <h1 class="titulo-verde-gigante mb-4">
+                <span class="text-gradient">AgroHub UniRV Rio Verde</span>
+            </h1>
+
+            <p class="lead text-muted mx-auto" style="max-width: 800px;">
+                O <strong>AgroHub UniRV</strong> é o centro de inovação e tecnologia da
+                <strong>Universidade de Rio Verde (UniRV)</strong>, criado para conectar
+                <strong>pesquisa, startups, indústria e produtores rurais</strong>.
+                Um espaço que impulsiona o <strong>Agro 4.0</strong> com soluções digitais, automação e
+                sustentabilidade.
+            </p>
+        </div>
+    </section>
+
+
+    <!-- SOBRE O HUB -->
+    <section class="py-5 py-xl-10 bg-white">
+        <div class="container px-5">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <img src="https://www.unirv.edu.br/conteudo/galeria_noticias/views/19644_1243268437913.jpg"
+                         class="img-fluid rounded-4 shadow" alt="AgroHub UniRV">
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <h2 class="fw-bold text-gradient mb-3">Inovação e Sustentabilidade no Coração do Agro</h2>
+                    <p class="text-muted fs-5">
+                        O AgroHub UniRV é um <strong>Centro de Inovação e Tecnologia</strong> apoiado pela
+                        <strong>FINEP</strong> e voltado à transformação digital do agronegócio em Goiás.
+                        Ele oferece infraestrutura moderna, laboratórios e programas que unem a academia,
+                        startups e o setor produtivo.
+                    </p>
+                    <p class="text-muted fs-5">
+                        Localizado em <strong>Rio Verde (GO)</strong>, um dos maiores polos agroindustriais do país,
+                        o centro fortalece a integração entre ensino, pesquisa e mercado,
+                        promovendo soluções inteligentes e sustentáveis para o campo.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pilares -->
+    <section class="py-5 py-xl-12 bg-light">
+        <div class="container px-5">
+            <div class="text-center mb-7" data-aos="fade-up">
+                <h2 class="fw-bold mb-3"><span class="text-gradient">Pilares do AgroHub</span></h2>
+                <p class="text-muted fs-5">Os quatro eixos que impulsionam a inovação no agronegócio goiano</p>
+            </div>
+            </br>
+            </br>
+            </br>
+            <div class="row g-5 justify-content-center">
+
+                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="card-process h-100">
+                        <div class="icon-float"><i class="bi bi-lightbulb-fill"></i></div>
+                        <div class="process-body">
+                            <span class="badge-step">1</span>
+                            <h4 class="text-gradient fw-bold mt-3">Inovação e Pesquisa</h4>
+                            <p class="text-muted px-3">
+                                Desenvolvimento de tecnologias aplicadas à agricultura, pecuária e indústria, com base
+                                científica e visão sustentável.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="card-process h-100">
+                        <div class="icon-float"><i class="bi bi-cpu-fill"></i></div>
+                        <div class="process-body">
+                            <span class="badge-step">2</span>
+                            <h4 class="text-gradient fw-bold mt-3">Transformação Digital</h4>
+                            <p class="text-muted px-3">
+                                Uso de IA, IoT e automação para impulsionar o Agro 4.0, conectando dados, sensores e
+                                análises inteligentes no campo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="card-process h-100">
+                        <div class="icon-float"><i class="bi bi-people-fill"></i></div>
+                        <div class="process-body">
+                            <span class="badge-step">3</span>
+                            <h4 class="text-gradient fw-bold mt-3">Empreendedorismo</h4>
+                            <p class="text-muted px-3">
+                                Fomento a startups e parcerias com empresas do setor para acelerar ideias e gerar
+                                impacto real na economia local.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="card-process h-100">
+                        <div class="icon-float"><i class="bi bi-globe-americas"></i></div>
+                        <div class="process-body">
+                            <span class="badge-step">4</span>
+                            <h4 class="text-gradient fw-bold mt-3">Sustentabilidade</h4>
+                            <p class="text-muted px-3">
+                                Compromisso com práticas sustentáveis, redução de impacto ambiental e incentivo a uma
+                                agricultura mais verde.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CONVITE -->
+    <section class="py-5 py-xl-10 bg-gradient-verde text-white text-center">
+        <div class="container px-5">
+            <h2 class="fw-bold mb-4">Conecte-se ao Futuro do Agro</h2>
+            <p class="fs-5 opacity-90 mb-5">
+                Sua startup, empresa ou pesquisa pode fazer parte do ecossistema de inovação do AgroHub UniRV.
+                Juntos, podemos desenvolver soluções digitais, automação e inteligência para o campo.
+            </p>
+            <a href="https://www.unirv.edu.br" target="_blank"
+               class="btn btn-light btn-lg fw-bold rounded-pill px-5 py-3 shadow">
+                Saiba mais na UniRV
+            </a>
+        </div>
+    </section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init({ duration: 1000, once: true, easing: 'ease-out-cubic' });
+</script>
+{% endblock %}

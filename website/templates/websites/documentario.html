@@ -1,0 +1,1017 @@
+{% block title %}Águas de Ébano: Histórias que Inspiram{% endblock %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Águas de Ébano: Histórias que Inspiram</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Tailwind + DaisyUI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- GLightbox -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+
+    <style>
+        :root {
+            --primary: #906e45;
+            --secondary: #597240;
+            --dark: #0f172a;
+            --light-bg: #f8f4e8;
+            --light-card: #fefbf5;
+            --text-dark: #1a1a1a;
+            --text-muted: #4a4a4a;
+            --accent-gold: #b8935c;
+        }
+
+        /* Fundo claro com textura de papel envelhecido */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8f4e8 0%, #f5efe2 50%, #f0e8d8 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="5"/></filter><rect width="200" height="200" filter="url(%23n)" opacity="0.04"/></svg>') repeat;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .font-garamond {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Navegação ESCURA com glassmorphism */
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hero com gradiente terroso CLARO */
+        .gradient-hero {
+            background: linear-gradient(-45deg, #d9c2a3, #e6d5b8, #f0e8d8, #d4e4c8, #c8d6b0);
+            background-size: 400% 400%;
+            animation: gradient 30s ease infinite;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .video-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            filter: sepia(0.3) brightness(1.1);
+        }
+
+        /* Hover 3D suave */
+        .hover-3d {
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .hover-3d:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(89, 114, 64, 0.25);
+        }
+
+        /* Logo */
+        .logo-nav {
+            height: 48px;
+            width: auto;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            transition: all 0.4s ease;
+        }
+        @media (min-width: 640px) { .logo-nav { height: 56px; } }
+        @media (min-width: 768px) { .logo-nav { height: 62px; } }
+        @media (min-width: 1024px) { .logo-nav { height: 68px; } }
+        @media (min-width: 1280px) { .logo-nav { height: 74px; } }
+
+        .logo-nav:hover {
+            filter: drop-shadow(0 12px 24px rgba(89, 114, 64, 0.5)) brightness(1.1);
+            transform: translateY(-3px);
+        }
+
+        /* Botões */
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 600;
+            padding: 1rem 2.5rem;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 25px rgba(89, 114, 64, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(89, 114, 64, 0.4);
+        }
+
+        /* Cards claros com borda sutil */
+        .card-light {
+            background: var(--light-card);
+            border: 1px solid rgba(144, 110, 69, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Títulos com linha dourada */
+        .title-line {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        .title-line::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--accent-gold), transparent);
+            border-radius: 2px;
+        }
+
+        /* Sinopse com fundo de pergaminho claro */
+        .sinopse-card {
+            background: linear-gradient(145deg, #fefbf5, #fdf8ed);
+            border: 1px solid rgba(144, 110, 69, 0.25);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Seções com fundo claro alternado */
+        .section-light {
+            background: linear-gradient(to bottom, #f8f4e8, #f5efe2);
+        }
+        .section-lighter {
+            background: linear-gradient(to bottom, #fdf8ed, #f8f4e8);
+        }
+@keyframes typing {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+.typewriter {
+  display: inline-block;
+  border-right: 0.15em solid #906e45;
+  animation: typing 4s steps(60, end) forwards, blink .75s step-end infinite;
+  white-space: normal; /* permite quebrar linha */
+  overflow: hidden; /* ainda esconde o que não foi digitado */
+  clip-path: inset(0 100% 0 0);
+}
+    </style>
+</head>
+<body>
+
+<!-- Navegação ESCURA -->
+<nav class="fixed top-0 w-full z-50 glass-nav text-white">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+        <a href="#" class="flex items-center space-x-4 group">
+            <div class="hover-3d">
+                <img src="{% static 'assets/logo_documentario.png' %}" alt="Logo Águas de Ébano" class="logo-nav"
+                     loading="lazy">
+            </div>
+        </a>
+        <ul class="hidden md:flex space-x-8 text-sm font-medium">
+            <li><a href="#documentario" class="hover:text-[#b8935c] transition">Documentário</a></li>
+            <li><a href="#bastidores" class="hover:text-[#b8935c] transition">Bastidores</a></li>
+            <li><a href="#historias" class="hover:text-[#b8935c] transition">Histórias</a></li>
+            <li><a href="#materia" class="hover:text-[#b8935c] transition">Matéria</a></li>
+            <li><a href="#sinopse" class="hover:text-[#b8935c] transition">Sinopse</a></li>
+            <li><a href="#trilhas" class="hover:text-[#b8935c] transition">Trilhas</a></li>
+            <li><a href="#galeria" class="hover:text-[#b8935c] transition">Galeria</a></li>
+            <li><a href="#apoio" class="hover:text-[#b8935c] transition">Apoio</a></li>
+            <li><a href="#creditos" class="hover:text-[#b8935c] transition">Créditos</a></li>
+        </ul>
+        <div class="md:hidden cursor-pointer" onclick="this.querySelector('.mobile-menu').classList.toggle('hidden')">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </div>
+    </div>
+    <div class="mobile-menu hidden md:hidden bg-[#0f172a]/95 backdrop-blur-md px-6 py-4 border-t border-gray-600">
+        <a href="#documentario" class="block py-2 text-white hover:text-[#b8935c]">Documentário</a>
+        <a href="#bastidores" class="block py-2 text-white hover:text-[#b8935c]">Bastidores</a>
+        <a href="#historias" class="block py-2 text-white hover:text-[#b8935c]">Histórias</a>
+        <a href="#materia" class="block py-2 text-white hover:text-[#b8935c]">Matéria</a>
+        <a href="#sinopse" class="block py-2 text-white hover:text-[#b8935c]">Sinopse</a>
+        <a href="#trilhas" class="block py-2 text-white hover:text-[#b8935c]">Trilhas</a>
+        <a href="#galeria" class="block py-2 text-white hover:text-[#b8935c]">Galeria</a>
+        <a href="#apoio" class="block py-2 text-white hover:text-[#b8935c]">Apoio</a>
+        <a href="#creditos" class="block py-2 text-white hover:text-[#b8935c]">Créditos</a>
+    </div>
+</nav>
+
+<!-- Hero com fundo claro e vídeo sutil -->
+<header class="relative h-screen flex items-center justify-center gradient-hero overflow-hidden">
+    <video class="video-bg" autoplay muted loop playsinline>
+        <source src="{% static 'assets/hero-bg.mp4' %}" type="video/mp4">
+    </video>
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#f8f4e8]/70 to-[#f8f4e8]/90"></div>
+    <div class="relative text-center px-6 max-w-5xl z-10" data-aos="fade-up">
+        <h1 class="typewriter text-5xl md:text-7xl font-garamond font-bold leading-tight mb-6 bg-gradient-to-r from-[#906e45] to-[#597240] bg-clip-text text-transparent drop-shadow-md">
+            “Das florestas africanas às águas do Cerrado: uma travessia entre raízes, vozes e ancestralidade.”
+        </h1>
+        <p class="text-lg md:text-xl text-[#1a1a1a] mb-10 max-w-3xl mx-auto leading-relaxed font-medium">
+            Site oficial do documentário <strong>Águas de Ébano</strong>: trailer, bastidores, histórias, trilhas,
+            galeria e créditos.
+        </p>
+        <a href="#documentario" class="btn-primary text-lg">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8 5v14l11-7L8 5z"/>
+            </svg>
+            Assistir Trailer Oficial
+        </a>
+    </div>
+</header>
+<!-- Eventos -->
+<section id="eventos" class="py-32 section-lighter">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+        <h2 class="text-5xl md:text-6xl font-garamond text-[#597240] mb-16 title-line" data-aos="fade-up">
+            Agenda de Exibições
+        </h2>
+
+        <div class="space-y-6 text-left max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+            <div class="flex items-start gap-4 p-4 bg-white/70 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <span class="text-2xl font-bold text-[#906e45] min-w-24">12/11</span>
+                <div>
+                    <p class="font-semibold text-[#1a1a1a]">IF – A noite</p>
+                    <p class="text-sm text-[#4a4a4a]">Exibição noturna no Instituto Federal</p>
+                </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-4 bg-white/70 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <span class="text-2xl font-bold text-[#906e45] min-w-24">13/11</span>
+                <div>
+                    <p class="font-semibold text-[#1a1a1a]">Valdivino</p>
+                    <p class="text-sm text-[#4a4a4a]">07:00 – 08:00 | 13:00 – 14:00</p>
+                </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-4 bg-white/70 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <span class="text-2xl font-bold text-[#906e45] min-w-24">18/11</span>
+                <div>
+                    <p class="font-semibold text-[#1a1a1a]">Quilombo</p>
+                    <p class="text-sm text-[#4a4a4a]">19:00</p>
+                </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-4 bg-white/70 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <span class="text-2xl font-bold text-[#906e45] min-w-24">19/11</span>
+                <div>
+                    <p class="font-semibold text-[#1a1a1a]">Virtus</p>
+                    <p class="text-sm text-[#4a4a4a]">19:00</p>
+                </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-4 bg-white/70 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <span class="text-2xl font-bold text-[#906e45] min-w-24">24/11</span>
+                <div>
+                    <p class="font-semibold text-[#1a1a1a]">Joaquim Berto</p>
+                    <p class="text-sm text-[#4a4a4a]">07:30 (matutino) | 13:30 (vespertino)</p>
+                </div>
+            </div>
+        </div>
+
+        <p class="mt-10 text-sm text-[#666] italic" data-aos="fade-up" data-aos-delay="400">
+            *Horários sujeitos a confirmação. Acompanhe atualizações no site.
+        </p>
+    </div>
+</section>
+<!-- Documentário -->
+<!-- Trailer -->
+<!-- Trailer Oficial -->
+<section id="documentario" class="py-32 section-light">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <h2 class="text-5xl md:text-6xl font-garamond text-[#906e45] mb-16 title-line" data-aos="fade-up">
+            Trailer Oficial
+        </h2>
+
+        <div class="card-light rounded-3xl p-4 shadow-xl hover-3d" data-aos="fade-up" data-aos-delay="200">
+            <iframe
+                    class="w-full aspect-video rounded-2xl"
+                    src="https://www.youtube-nocookie.com/embed/NkM1mr3XbTY?rel=0&modestbranding=1&enablejsapi=1"
+                    title="Trailer Oficial - Águas de Ébano"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+
+    </div>
+</section>
+
+<!-- Bastidores -->
+<section id="bastidores" class="py-32 section-lighter">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <h2 class="text-5xl md:text-6xl font-garamond text-[#597240] mb-16 title-line" data-aos="fade-up">Bastidores e
+            Significados</h2>
+        <div class="card-light rounded-3xl p-4 shadow-xl hover-3d" data-aos="fade-up" data-aos-delay="200">
+            <iframe
+                    class="w-full aspect-video rounded-2xl"
+                    src="https://www.youtube-nocookie.com/embed/Yup1voH6iCs?rel=0&modestbranding=1&enablejsapi=1"
+                    title="Bastidores e Significados - Águas de Ébano"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+            </iframe>
+        </div>
+        <p class="mt-8 text-lg text-[#4a4a4a] max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="400">
+            Mergulhe nos bastidores e descubra os significados profundos por trás das histórias.
+        </p>
+    </div>
+</section>
+
+<!--Encontro Águas de Ébano – Evento de Divulgação do Projeto em Iporá -->
+<section id="historias" class="py-32 section-light">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <h2 class="text-5xl md:text-6xl font-garamond text-[#906e45] mb-16 title-line"
+            data-aos="fade-up">
+            Encontro Águas de Ébano – Evento de Divulgação do Projeto em Iporá
+        </h2>
+
+        <div class="card-light rounded-3xl p-4 shadow-xl hover-3d"
+             data-aos="fade-up" data-aos-delay="200">
+            <iframe
+                    class="w-full aspect-video rounded-2xl"
+                    src="https://www.youtube-nocookie.com/embed/BsLTNw-G4oA?start=1&rel=0&modestbranding=1&enablejsapi=1"
+                    title="Encontro Águas de Ébano – Evento de Divulgação do Projeto em Ipor – Águas de Ébano"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+        <p class="mt-8 text-lg text-[#4a4a4a] max-w-3xl mx-auto"
+           data-aos="fade-up" data-aos-delay="400">
+            Histórias autênticas de resistência e empoderamento das mulheres negras de Iporá.
+        </p>
+    </div>
+</section>
+
+<!-- Matéria -->
+<!-- Matérias -->
+<!-- Matérias -->
+<section id="materias" class="py-20 section-lighter">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-5xl md:text-6xl font-garamond text-[#597240] mb-16 text-center title-line"
+            data-aos="fade-up">
+            Matérias
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Matéria Completa -->
+            <div class="card-light rounded-3xl p-6 hover-3d border border-[#906e45]/20 text-center"
+                 data-aos="zoom-in">
+                <h3 class="text-xl font-garamond text-[#597240] mb-4">
+                    Matéria Completa
+                </h3>
+                <p class="text-md leading-relaxed text-[#1a1a1a] mb-6">
+                    Leia a matéria sobre resistência, empoderamento e protagonismo das mulheres negras de Iporá.
+                </p>
+                <a href="https://gncomunicacaoenoticias.com.br/2025/03/aguas-de-ebano-resistencia-empoderamento-e-protagonismo-das-mulheres-negras-de-ipora/"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn-primary inline-flex items-center gap-2 text-md font-medium"
+                   aria-label="Ler matéria completa no site GN Comunicação e Notícias">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+                    </svg>
+                    Ler Matéria Completa
+                </a>
+            </div>
+
+            <!-- Reel 1 -->
+            <div class="card-light rounded-3xl p-6 hover-3d border border-[#906e45]/20 text-center"
+                 data-aos="zoom-in" data-aos-delay="100">
+                <h3 class="text-xl font-garamond text-[#597240] mb-4">
+                    Reel 1
+                </h3>
+                <p class="text-md leading-relaxed text-[#1a1a1a] mb-6">
+                    Assista ao primeiro Reel sobre o projeto.
+                </p>
+                <a href="https://www.instagram.com/reel/DHJfY9NveKA/?igsh=MXFzN2E0YTI5andxNw=="
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn-primary inline-flex items-center gap-2 text-md font-medium"
+                   aria-label="Assistir Reel no Instagram">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                    </svg>
+                    Assistir no Instagram
+                </a>
+            </div>
+
+            <!-- Reel 2 -->
+            <div class="card-light rounded-3xl p-6 hover-3d border border-[#906e45]/20 text-center"
+                 data-aos="zoom-in" data-aos-delay="150">
+                <h3 class="text-xl font-garamond text-[#597240] mb-4">
+                    Reel 2
+                </h3>
+                <p class="text-md leading-relaxed text-[#1a1a1a] mb-6">
+                    Assista ao segundo Reel sobre o projeto.
+                </p>
+                <a href="https://www.instagram.com/reel/DHRIr0-sr65/?igsh=OHdncTc4a2xxeXFq"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn-primary inline-flex items-center gap-2 text-md font-medium"
+                   aria-label="Assistir Reel no Instagram">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                    </svg>
+                    Assistir no Instagram
+                </a>
+            </div>
+
+            <!-- Reel 3 -->
+            <div class="card-light rounded-3xl p-6 hover-3d border border-[#906e45]/20 text-center"
+                 data-aos="zoom-in" data-aos-delay="200">
+                <h3 class="text-xl font-garamond text-[#597240] mb-4">
+                    Reel 3
+                </h3>
+                <p class="text-md leading-relaxed text-[#1a1a1a] mb-6">
+                    Assista ao terceiro Reel sobre o projeto.
+                </p>
+                <a href="https://www.instagram.com/reel/DHXKgSHvxlf/?igsh=MXRiYTZyNmJoNzZtOA=="
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn-primary inline-flex items-center gap-2 text-md font-medium"
+                   aria-label="Assistir Reel no Instagram">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                    </svg>
+                    Assistir no Instagram
+                </a>
+            </div>
+
+            <!-- Reel 4 -->
+            <div class="card-light rounded-3xl p-6 hover-3d border border-[#906e45]/20 text-center"
+                 data-aos="zoom-in" data-aos-delay="250">
+                <h3 class="text-xl font-garamond text-[#597240] mb-4">
+                    Reel 4
+                </h3>
+                <p class="text-md leading-relaxed text-[#1a1a1a] mb-6">
+                    Assista ao quarto Reel sobre o projeto.
+                </p>
+                <a href="https://www.instagram.com/reel/DHd8Ib-xoTY/?igsh=NzhxNHFuOWVva2d5"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn-primary inline-flex items-center gap-2 text-md font-medium"
+                   aria-label="Assistir Reel no Instagram">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                    </svg>
+                    Assistir no Instagram
+                </a>
+            </div>
+
+            <!-- Reel 5 -->
+            <div class="card-light rounded-3xl p-6 hover-3d border border-[#906e45]/20 text-center"
+                 data-aos="zoom-in" data-aos-delay="300">
+                <h3 class="text-xl font-garamond text-[#597240] mb-4">
+                    Reel 5
+                </h3>
+                <p class="text-md leading-relaxed text-[#1a1a1a] mb-6">
+                    Assista ao quinto Reel sobre o projeto.
+                </p>
+                <a href="https://www.instagram.com/reel/DHjPDmaPPUX/?igsh=MXZ4bHFhenhqczVi"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn-primary inline-flex items-center gap-2 text-md font-medium"
+                   aria-label="Assistir Reel no Instagram">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                    </svg>
+                    Assistir no Instagram
+                </a>
+            </div>
+
+            <!-- Reel 6 -->
+            <div class="card-light rounded-3xl p-6 hover-3d border border-[#906e45]/20 text-center"
+                 data-aos="zoom-in" data-aos-delay="350">
+                <h3 class="text-xl font-garamond text-[#597240] mb-4">
+                    Reel 6
+                </h3>
+                <p class="text-md leading-relaxed text-[#1a1a1a] mb-6">
+                    Assista ao sexto Reel sobre o projeto.
+                </p>
+                <a href="https://www.instagram.com/reel/DHtyFuIPXOe/?igsh=MWFtcXQ1dHQ1enFiOA=="
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn-primary inline-flex items-center gap-2 text-md font-medium"
+                   aria-label="Assistir Reel no Instagram">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                    </svg>
+                    Assistir no Instagram
+                </a>
+            </div>
+
+            <!-- Reel 7 -->
+            <div class="card-light rounded-3xl p-6 hover-3d border border-[#906e45]/20 text-center"
+                 data-aos="zoom-in" data-aos-delay="400">
+                <h3 class="text-xl font-garamond text-[#597240] mb-4">
+                    Reel 7
+                </h3>
+                <p class="text-md leading-relaxed text-[#1a1a1a] mb-6">
+                    Assista ao sétimo Reel sobre o projeto.
+                </p>
+                <a href="https://www.instagram.com/reel/DHyhlbMxmWT/?igsh=bzFpY2xobzgyeGE2"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn-primary inline-flex items-center gap-2 text-md font-medium"
+                   aria-label="Assistir Reel no Instagram">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                    </svg>
+                    Assistir no Instagram
+                </a>
+            </div>
+
+            <!-- Reel 8 -->
+            <div class="card-light rounded-3xl p-6 hover-3d border border-[#906e45]/20 text-center"
+                 data-aos="zoom-in" data-aos-delay="450">
+                <h3 class="text-xl font-garamond text-[#597240] mb-4">
+                    Reel 8
+                </h3>
+                <p class="text-md leading-relaxed text-[#1a1a1a] mb-6">
+                    Assista ao oitavo Reel sobre o projeto.
+                </p>
+                <a href="https://www.instagram.com/reel/DH5nn82R0gW/?igsh=MWU1eWIzbTd6YWJkeQ=="
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn-primary inline-flex items-center gap-2 text-md font-medium"
+                   aria-label="Assistir Reel no Instagram">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                    </svg>
+                    Assistir no Instagram
+                </a>
+            </div>
+
+            <!-- Post 9 -->
+            <div class="card-light rounded-3xl p-6 hover-3d border border-[#906e45]/20 text-center"
+                 data-aos="zoom-in" data-aos-delay="500">
+                <h3 class="text-xl font-garamond text-[#597240] mb-4">
+                    Post no Instagram
+                </h3>
+                <p class="text-md leading-relaxed text-[#1a1a1a] mb-6">
+                    Veja o post sobre o projeto no Instagram.
+                </p>
+                <a href="https://www.instagram.com/p/DH89ljER_BC/?igsh=ZHZsMGZrMHIzZ3Fk"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn-primary inline-flex items-center gap-2 text-md font-medium"
+                   aria-label="Ver post no Instagram">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/>
+                    </svg>
+                    Ver no Instagram
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sinopse -->
+<section id="sinopse" class="py-32 section-light relative overflow-hidden">
+    <div class="max-w-5xl mx-auto px-6 relative z-10">
+        <h2 class="text-6xl font-garamond text-[#906e45] text-center mb-20 title-line" data-aos="fade-up">Sinopse</h2>
+        <div class="sinopse-card rounded-3xl p-10 md:p-16 hover-3d" data-aos="fade-up" data-aos-delay="100">
+            <div class="text-left mb-6">
+                <span class="inline-block text-[#1a1a1a] text-9xl font-garamond leading-none select-none">“</span>
+            </div>
+            <p class="text-lg md:text-xl leading-relaxed text-[#1a1a1a] text-justify hyphens-auto font-light italic tracking-wide px-4 md:px-8">
+                Águas de Ébano acompanha mulheres negras de Iporá (GO) em três eixos: trabalho, educação e organização
+                comunitária. Por meio de depoimentos em primeira pessoa e observação direta, o filme registra a
+                transmissão de saberes entre gerações (famílias que sustentaram a casa com a produção de doces),
+                trajetórias de migração e precariedade, experiências de racismo estrutural e o percurso de educadoras
+                que abriram caminho para centenas de alunos. <br><br>
+                No território quilombola de Pilões, evidencia-se a liderança feminina na associação local, o
+                enfrentamento cotidiano ao racismo e estratégias de fortalecimento coletivo. Sem reencenações, a
+                narrativa prioriza escuta e presença, articulando memórias familiares e vínculos com o rio e a terra.
+                <br><br>
+                Iporá, “águas claras” em tupi-guarani, remete ao fluxo de memória que retorna; ébano, madeira de
+                referência africana, funciona aqui como metáfora de permanência, beleza e dignidade negra. O retrato que
+                emerge é direto e preciso: <span class="font-semibold text-[#597240]">memória que se organiza, trabalho que dignifica, educação que emancipa</span>
+                — histórias reais de resistência e futuro.
+            </p>
+            <div class="text-right mt-6">
+                <span class="inline-block text-[#1a1a1a] text-9xl font-garamond leading-none select-none transform translate-y-8">”</span>
+            </div>
+        </div>
+        <div class="flex justify-center mt-16" data-aos="fade-up" data-aos-delay="300">
+            <div class="h-px w-64 bg-gradient-to-r from-transparent via-[#b8935c]/60 to-transparent"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Trilhas Sonoras -->
+<section id="trilhas" class="py-32 section-lighter">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-5xl font-garamond text-[#906e45] text-center mb-16 title-line" data-aos="fade-up">
+            Trilhas Sonoras Originais
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-12">
+
+            <!-- TRILHA PRINCIPAL -->
+            <div class="card-light rounded-3xl p-8 hover-3d border border-[#597240]/20" data-aos="fade-right">
+                <img src="{% static 'assets/tambor.jpg' %}" alt="Voz de Tambor"
+                     class="w-full rounded-2xl mb-6 shadow-lg object-cover">
+
+                <h3 class="text-2xl font-garamond text-[#597240] mb-2">Voz de Tambor</h3>
+                <p class="text-sm text-[#4a4a4a] italic mb-4">
+                    <strong>Estilo:</strong> Fusão Afro-Brasileira, ritmo visceral, percussão poderosa
+                </p>
+                <p class="text-xs text-[#4a4a4a] mb-6">
+                    <strong>Letra e Melodia:</strong> Wayrone Klaiton Luiz Silva
+                </p>
+
+                <!-- Player de Áudio -->
+                <audio controls class="w-full mb-6 rounded-lg">
+                    <source src="{% static 'assets/tambor.mp3' %}" type="audio/mpeg">
+                    Seu navegador não suporta áudio.
+                </audio>
+
+                <!-- Botão de Letra (Expansível) -->
+                <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('svg').classList.toggle('rotate-180')"
+                        class="w-full flex justify-between items-center text-sm font-medium text-[#1a1a1a] hover:text-[#906e45] transition">
+                    <span>Ver Letra</span>
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+
+                <!-- Letra (inicialmente oculta) -->
+                <div class="hidden mt-4 text-sm text-[#1a1a1a] leading-relaxed font-light italic border-t border-[#906e45]/20 pt-4 space-y-3">
+                    <p class="font-semibold text-[#906e45]">[Introdução]</p>
+                    <p class="text-xs text-[#4a4a4a] mb-4">Ecoam tambores, gritos na noite, vozes se erguem</p>
+                    <p class="font-medium">A pele que resiste, o grito que não cansa.</p>
+
+                    <p class="font-semibold text-[#906e45] mt-6">[Verso 1]</p>
+                    <p>No suor de quem levanta o chão<br>Pulsam histórias em cada mão<br>Um tambor que fala sem
+                        parar<br>Enquanto a luta nos faz caminhar<br>Das grades ao beco, o drama persiste<br>Mas no
+                        peito a força nunca desiste</p>
+
+                    <p class="font-semibold text-[#906e45] mt-6">[Refrão]</p>
+                    <p>É a <strong>voz de tambor</strong> que faz vibrar<br>Cada batida é história pra contar<br>Negra é
+                        a carne, negra é a vida<br>Negra é a luta que nunca é vencida<br>Do Quilombo ao asfalto, o som
+                        ecoa<br>E a resistência faz a rua voar</p>
+
+                    <p class="font-semibold text-[#906e45] mt-6">[Verso 2]</p>
+                    <p>Entre becos, prisões e subemprego<br>A carne mais barata nunca teve sossego<br>Mas na pele que o
+                        sol marcou<br>Há um fogo que nunca apagou<br>Raízes profundas que o tempo não corta<br>A herança
+                        de quem abriu tantas portas</p>
+
+                    <p class="font-semibold text-[#906e45] mt-6">[Pré-refrão]</p>
+                    <p>E quando o silêncio pesa demais<br>O tambor responde e ninguém cala mais<br>É Zumbi que vive em
+                        cada pulsar<br>Na palma da mão, a revolta vai soar</p>
+
+                    <p class="font-semibold text-[#906e45] mt-6">[Ponte]</p>
+                    <p class="text-xs text-[#4a4a4a] italic mb-2">O tambor vibra, ecoa e insiste</p>
+                    <p>Zumbi nos braços, Elza na voz<br>Luedji canta, coragem feroz<br>Somos corrente que não se
+                        desfaz<br>O futuro é negro e não volta atrás</p>
+
+                    <p class="font-semibold text-[#906e45] mt-6">[Final]</p>
+                    <p class="text-xs text-[#4a4a4a] italic">Ecoam tambores na noite, com força e alma</p>
+                    <p class="font-medium mt-2">A pele resiste, a luta persiste, o futuro é nosso.</p>
+                </div>
+            </div>
+
+            <!-- TRILHA DE ENCERRAMENTO -->
+            <div class="card-light rounded-3xl p-8 hover-3d border border-[#597240]/20" data-aos="fade-left">
+                <img src="{% static 'assets/beleza.jpg' %}" alt="Negra, És Pura Beleza"
+                     class="w-full rounded-2xl mb-6 shadow-lg object-cover">
+
+                <h3 class="text-2xl font-garamond text-[#597240] mb-2">Negra, És Pura Beleza</h3>
+                <p class="text-sm text-[#4a4a4a] italic mb-4">
+                    <strong>Estilo:</strong> Soul, R&B, voz feminina
+                </p>
+                <p class="text-xs text-[#4a4a4a] mb-6">
+                    <strong>Letra e Melodia:</strong> Wayrone Klaiton Luiz Silva
+                </p>
+                <!-- Player de Áudio -->
+                <audio controls class="w-full mb-6 rounded-lg">
+                    <source src="{% static 'assets/beleza.mp3' %}" type="audio/mpeg">
+                    Seu navegador não suporta áudio.
+                </audio>
+
+                <!-- Botão de Letra -->
+                <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('svg').classList.toggle('rotate-180')"
+                        class="w-full flex justify-between items-center text-sm font-medium text-[#1a1a1a] hover:text-[#906e45] transition">
+                    <span>Ver Letra</span>
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+
+                <!-- Letra (inicialmente oculta) -->
+                <div class="hidden mt-4 text-sm text-[#1a1a1a] leading-relaxed font-light italic border-t border-[#906e45]/20 pt-4 space-y-3">
+                    <p class="font-semibold text-[#906e45]">[Verso 1]</p>
+                    <p>Teu reflexo conta histórias<br>De rainhas que vieram antes de ti.<br>Nos teus traços vive a
+                        memória,<br>Que o mundo nunca vai extinguir.<br>Teu sorriso é chama acesa,<br>Teu olhar carrega
+                        o sol.<br>Cada passo é resistência,<br>Mulher negra, és o farol.</p>
+
+                    <p class="font-semibold text-[#906e45] mt-6">[Pré-Refrão]</p>
+                    <p>Se um dia te rejeitaram,<br>Isso não vai te definir.<br>Teu valor é tua essência,<br>Basta só
+                        você sentir:<br>Teu nariz é força e vida,<br>Teus lábios são pura arte.<br>Tua pele é luz que
+                        brilha,<br>Tua cor é teu estandarte.</p>
+
+                    <p class="font-semibold text-[#906e45] mt-6">[Refrão]</p>
+                    <p><strong>Negra, és pura beleza,</strong><br>Teu corpo dança com o mar.<br>És poema em cada
+                        curva,<br>És coragem no teu olhar.<br>Tuas raízes são coroas,<br>Que o tempo não pode
+                        apagar.<br>Mulher negra, és o mundo,<br>E ninguém vai te calar.</p>
+
+                    <p class="font-semibold text-[#906e45] mt-6">[Verso 2]</p>
+                    <p>Em teus cabelos há histórias<br>De batalhas e de paixão.<br>Cada trança é resistência,<br>Cada
+                        cacho é revolução.<br>Teu andar é liberdade,<br>Teu riso é pura verdade.<br>És espelho para o
+                        futuro,<br>És herança de ancestralidade.</p>
+
+                    <p class="font-semibold text-[#906e45] mt-6">[Ponte]</p>
+                    <p>Teu axé é tua bandeira,<br>Teu canto é libertação.<br>És raiz de toda luta,<br>És o pulso da
+                        canção.<br>Quando o mundo tentar te apagar,<br>Tua luz vai se multiplicar.<br>Mulher negra, és o
+                        infinito,<br>Tua força é teu lugar.</p>
+
+                    <p class="font-semibold text-[#906e45] mt-6">[Outro]</p>
+                    <p>Teu nariz é força e vida,<br>Teus lábios são pura arte.<br>Tua pele é luz que brilha,<br>Tua cor
+                        é teu estandarte.<br>Se um dia te rejeitaram,<br>Isso nunca vai importar.<br>O mundo é teu,
+                        mulher negra,<br><strong>Tudo começa ao se amar.</strong></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Galeria -->
+<section id="galeria" class="py-32 section-light">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-5xl font-garamond text-[#906e45] text-center mb-16 title-line" data-aos="fade-up">Galeria</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <a href="{% static 'assets/doc004.png' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up">
+                <img src="{% static 'assets/doc004.png' %}" alt="Cena 1"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/wkc.png' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up">
+                <img src="{% static 'assets/wkc.png' %}" alt="Cena 1"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/doc.JPG' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up">
+                <img src="{% static 'assets/doc.JPG' %}" alt="Cena 1"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/doc001.jpg' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up"
+               data-aos-delay="100">
+                <img src="{% static 'assets/doc001.jpg' %}" alt="Cena 2"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/doc002.jpg' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up"
+               data-aos-delay="100">
+                <img src="{% static 'assets/doc002.jpg' %}" alt="Cena 2"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/doc (1).JPG' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up"
+               data-aos-delay="100">
+                <img src="{% static 'assets/doc (1).JPG' %}" alt="Cena 2"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/doc (2).JPG' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up"
+               data-aos-delay="200">
+                <img src="{% static 'assets/doc (2).JPG' %}" alt="Cena 3"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/editor.jpg' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up">
+                <img src="{% static 'assets/editor.jpg' %}" alt="Cena 1"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/doc005.png' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up">
+                <img src="{% static 'assets/doc005.png' %}" alt="Cena 1"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/doc006.png' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up">
+                <img src="{% static 'assets/doc006.png' %}" alt="Cena 1"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/doc007.jpg' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up">
+                <img src="{% static 'assets/doc007.jpg' %}" alt="Cena 1"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/doc21.JPG' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up">
+                <img src="{% static 'assets/doc21.JPG' %}" alt="Cena 1"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/doc22.JPG' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up">
+                <img src="{% static 'assets/doc22.JPG' %}" alt="Cena 1"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+            <a href="{% static 'assets/doc23.JPG' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up">
+                <img src="{% static 'assets/doc23.JPG' %}" alt="Cena 1"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+                        <a href="{% static 'assets/doc26.png' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up">
+                <img src="{% static 'assets/doc26.png' %}" alt="Cena 1"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+                                    <a href="{% static 'assets/doc27.png' %}"
+               class="glightbox hover-3d rounded-2xl overflow-hidden shadow-xl block card-light p-2" data-aos="fade-up">
+                <img src="{% static 'assets/doc27.png' %}" alt="Cena 1"
+                     class="w-full h-64 object-cover rounded-xl transition-transform duration-500 hover:scale-105">
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Realização -->
+<!-- Realização -->
+<section id="realizacao" class="py-32 section-light">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <h2 class="text-5xl md:text-6xl font-garamond text-[#906e45] mb-12 title-line" data-aos="fade-up">
+            Realização
+        </h2>
+
+        <p class="text-lg text-[#4a4a4a] mb-16 max-w-3xl mx-auto leading-relaxed" data-aos="fade-up"
+           data-aos-delay="100">
+            Uma produção independente com amor, ancestralidade e compromisso com as vozes do Cerrado.
+        </p>
+
+        <!-- Card sem borda, apenas sombra e hover 3D -->
+        <div class="hover-3d inline-block p-8 rounded-3xl shadow-2xl transform-gpu transition-all duration-300"
+             style="background: transparent;"
+             data-aos="zoom-in" data-aos-delay="200">
+
+            <div class="rounded-2xl p-10 flex items-center justify-center min-h-72">
+                <!-- LOGO MAIOR E CENTRALIZADA -->
+                <img src="{% static 'assets/rea.png' %}"
+                     alt="Águas de Ébano – Realização"
+                     class="h-48 md:h-64 object-contain drop-shadow-2xl">
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Apoio -->
+<section id="apoio" class="py-32 section-lighter">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <h2 class="text-5xl font-garamond text-[#906e45] mb-12 title-line" data-aos="fade-up">Apoio</h2>
+        <p class="text-[#4a4a4a] mb-12 text-lg max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+            Agradecemos aos apoiadores que tornaram este projeto possível.
+        </p>
+
+        <!-- CARD ESCURO com efeito 3D -->
+        <div class="hover-3d inline-block p-4 rounded-3xl shadow-2xl"
+             style="background: linear-gradient(145deg, #1a2332, #0f172a); border: 1px solid rgba(144, 110, 69, 0.25);"
+             data-aos="zoom-in">
+            <img src="{% static 'assets/apoio.png' %}"
+                 alt="Apoiadores"
+                 class="max-w-full h-auto rounded-2xl shadow-lg">
+        </div>
+    </div>
+</section>
+
+<!-- Créditos -->
+<section id="creditos" class="py-32 section-light">
+    <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-6xl font-garamond text-[#906e45] text-center mb-20 title-line" data-aos="fade-up">Créditos</h2>
+        <div class="grid md:grid-cols-2 gap-12 text-base text-[#1a1a1a]">
+            <!-- Coluna Esquerda -->
+            <div class="space-y-10">
+                <div data-aos="fade-up"><h3 class="text-3xl font-garamond text-[#597240] mb-6 title-line text-left">
+                    REALIZAÇÃO</h3>
+                    <p><strong>Apresentação:</strong> GN Comunicação e Notícias / Araguaia em Destaque</p>
+                    <p class="mt-4"><strong>Proponente:</strong> Clêuza de Souza Rocha</p>
+                    <p class="mt-4"><strong>Infraestrutura Técnica:</strong> Instituto Virtus / TV Virtus</p>
+                    <p class="mt-4"><strong>Apoio Institucional:</strong> Secretaria Municipal de Cultura de Iporá (GO)
+                        / PNAB</p></div>
+                <div data-aos="fade-up" data-aos-delay="100"><h3
+                        class="text-3xl font-garamond text-[#597240] mb-6 title-line text-left">ROTEIRO</h3>
+                    <p><strong>Roteiro:</strong> Wayrone Klaiton Luiz Silva</p>
+                    <p class="mt-4"><strong>Co-Roteiro:</strong> Simone Afonso Fernandes</p></div>
+                <div data-aos="fade-up" data-aos-delay="200"><h3
+                        class="text-3xl font-garamond text-[#597240] mb-6 title-line text-left">DIREÇÃO</h3>
+                    <p><strong>Direção Geral:</strong> Wayrone Silva & Clêuza Rocha</p>
+                    <p class="mt-4"><strong>Produção Executiva:</strong> Wayrone Klaiton Luiz Silva</p>
+                    <p class="mt-4"><strong>Direção de Fotografia:</strong> Gean Gilberto Nascimento Luz</p>
+                    <p class="mt-4"><strong>Assistência:</strong> Simone Afonço Fernandes</p></div>
+                <div data-aos="fade-up" data-aos-delay="300"><h3
+                        class="text-3xl font-garamond text-[#597240] mb-6 title-line text-left">NARRAÇÃO</h3>
+                    <p><strong>Narradora:</strong> Clêuza de Souza Rocha</p></div>
+            </div>
+            <!-- Coluna Direita -->
+            <div class="space-y-10">
+                <div data-aos="fade-up" data-aos-delay="400"><h3
+                        class="text-3xl font-garamond text-[#597240] mb-6 title-line text-left">EQUIPE TÉCNICA</h3>
+                    <p><strong>Produção Audiovisual:</strong> Gean Gilberto Nascimento Luz</p>
+                    <p class="mt-4"><strong>Captação:</strong> Gean Gilberto Nascimento Luz</p>
+                    <p class="mt-4"><strong>Edição de Som:</strong> Túlio Prilla</p>
+                    <p class="mt-4"><strong>Finalização:</strong> Túlio Prilla</p>
+                    <p class="mt-4"><strong>Som Direto:</strong> Simone Afonso Fernandes</p></div>
+                <div data-aos="fade-up" data-aos-delay="500"><h3
+                        class="text-3xl font-garamond text-[#597240] mb-6 title-line text-left">MÚSICA E ARTE</h3>
+                    <p><strong>Trilha Sonora:</strong> Wayrone Klaiton Luiz Silva</p>
+                    <p class="mt-4"><strong>Canções:</strong> Thalita Costa</p>
+                    <p class="mt-4"><strong>Design Gráfico:</strong> Wayrone Klaiton Luiz Silva</p></div>
+                <div data-aos="fade-up" data-aos-delay="600"><h3
+                        class="text-3xl font-garamond text-[#597240] mb-6 title-line text-left">PARTICIPAÇÕES</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li>Sebastiana Roberto Martins</li>
+                        <li>Alteride Silva de Jesus</li>
+                        <li>Isabel Batista dos Santos Rocha</li>
+                        <li>Júnia Araújo Luiz</li>
+                    </ul>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="700"><h3
+                        class="text-3xl font-garamond text-[#597240] mb-6 title-line text-left">PESQUISA (MEMBRO EXTERNO VOLUNTÁRIOS)</h3>
+                    <ul class="space-y-1 text-sm">
+                        <li>Dra. Maria Gláucia Dourado Furquim</li>
+                        <li>Me. José Carlos de Sousa Júnior</li>
+                        <li>Me. Luciana Santos da Rosa</li>
+                        <li>Me. Wildinara Karlane Luiz da Silva</li>
+                        <li>Dra. Daniela Cabral de Oliveira</li>
+                    </ul>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="800">
+                    <h3 class="text-3xl font-garamond text-[#597240] mb-6 title-line text-left">
+                        Agradecimentos
+                    </h3>
+
+                    <p class="text-sm leading-relaxed text-[#1a1a1a] mb-2">
+                        Às mulheres que deram voz e corpo a estas águas.
+                    </p>
+                    <p class="text-sm leading-relaxed text-[#1a1a1a] mb-2">
+                        À comunidade de Iporá e aos moradores dos Pilões.
+                    </p>
+                    <p class="text-sm leading-relaxed text-[#1a1a1a] mb-2">
+                        À Prefeitura de Iporá e à Secretaria Municipal de Cultura, pelo apoio à memória local.
+                    </p>
+                    <p class="text-sm leading-relaxed text-[#1a1a1a] mb-2">
+                        Ao Hozaná Damasceno, Sonilene Teles, Dalvirene Araújo, Roseli de Assis e Rosimeire, por seu
+                        apoio essencial.
+                    </p>
+                </div>
+            </div>
+        </div>
+</section>
+
+<!-- Footer -->
+<footer class="py-16 bg-gradient-to-t from-[#f0e8d8] to-[#f8f4e8] text-center border-t border-[#e0d6c8]">
+    <p class="text-[#4a4a4a] text-sm">© 2025 <strong>Águas de Ébano</strong> — Produção Independente</p>
+</footer>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+<script>
+    AOS.init({ duration: 1000, once: true });
+    const lightbox = GLightbox({ selector: '.glightbox' });
+</script>
+</body>
+</html>
+{% endblock %}

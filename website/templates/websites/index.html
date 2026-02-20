@@ -1,34 +1,438 @@
 {% extends "websites/base.html" %}
-{% block title %}Início{% endblock %}
+{% block title %}Revolução no Agronegócio 4.0 - Tecnologia Flutter e IA{% endblock %}
 {% load static %}
+
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+<style>
+    :root {
+        --primary: #29913c;
+        --secondary: #34a853;
+        --dark: #1a5c2a;
+        --light: #f8fff9;
+    }
+
+    .hero-gradient {
+        background: linear-gradient(135deg, var(--primary), var(--dark));
+    }
+
+    .tech-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        height: 100%;
+        transition: all 0.4s ease;
+        border: 1px solid #e8f5e9;
+        box-shadow: 0 10px 30px rgba(41,145,60,0.08);
+    }
+
+    .tech-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 50px rgba(41,145,60,0.15);
+    }
+
+    .icon-tech {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .benefit-number {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+    }
+
+    .feature-badge {
+        background: rgba(41,145,60,0.1);
+        color: var(--primary);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 0.3rem;
+        display: inline-block;
+    }
+
+    .cta-section {
+        background: linear-gradient(135deg, var(--dark), var(--primary));
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="%23ffffff" opacity="0.05"><polygon points="1000,100 1000,0 0,100"/></svg>');
+        background-size: cover;
+    }
+
+    .stat-card {
+        background: rgba(255,255,255,0.1);
+        border-radius: 16px;
+        padding: 2rem;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+</style>
 
 <main class="flex-shrink-0">
 
-    <!-- Header-->
-    <header class="py-5">
-        <img style="width: 100%; height: auto;" class="profile-img" src="{% static 'assets/fundo.png' %}" alt="..."/>
-
-    </header>
-
-    <!-- About Section-->
-    <section class="bg-light py-5">
+    <!-- HERO SECTION -->
+    <section class="py-5 py-xl-12 hero-gradient text-white">
         <div class="container px-5">
-            <div class="row gx-5 justify-content-center">
-                <div class="col-xxl-8">
-                    <div class="text-center my-5">
-                        <h2 class="display-5 fw-bolder"><span
-                                class="text-gradient d-inline">Startup Secagem Digital</span></h2>
-                        <p class="lead fw-light mb-4">Tecnologia Secagem Digital: Monitore grãos e sementes com segurança e eficiência</p>
-                        <p class="text-muted" style="text-align: justify;" ></p>
-
-
-                          <img class="img-fluid" style="  border-radius: 1vw;" width="990"
-                                 src="{% static 'assets/banner.png' %}" alt="..."/>
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-10 col-xl-8" data-aos="fade-up">
+                    <h1 class="display-4 fw-bold mb-4">
+                        Revolução no <span class="text-warning">Agronegócio 4.0</span>
+                    </h1>
+                    <p class="lead mb-5 fs-4">
+                        Tecnologia Flutter multiplataforma, IA em tempo real e monitoramento inteligente para maximizar sua produtividade
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 justify-content-center">
+                        <a href="#tecnologias" class="btn btn-light btn-lg px-4 py-3 fw-bold">
+                            <i class="bi bi-play-circle me-2"></i>Saiba Mais
+                        </a>
+                        <a href="#contato" class="btn btn-outline-light btn-lg px-4 py-3 fw-bold">
+                            <i class="bi bi-calendar-check me-2"></i>Agende Demo
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- TECNOLOGIAS REVOLUCIONÁRIAS -->
+    <section id="tecnologias" class="py-5 py-xl-12 bg-light">
+        <div class="container px-5">
+            <div class="text-center mb-8" data-aos="fade-up">
+                <h2 class="fw-bold display-5 mb-3">
+                    Tecnologias <span class="text-success">Revolucionárias</span> para o Agro
+                </h2>
+                <p class="text-muted fs-5">Integramos as mais avançadas tecnologias para levar sua operação para o próximo nível</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Flutter -->
+                <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="tech-card">
+                        <div class="icon-tech">
+                            <i class="bi bi-phone"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Flutter Multiplataforma</h4>
+                        <p class="text-muted mb-4">
+                            Um único código para todas as plataformas: iOS, Android, Web e Desktop.
+                            <strong>Redução de 60% no tempo de desenvolvimento e custos.</strong>
+                        </p>
+                        <div class="mb-3">
+                            <span class="feature-badge">Desempenho nativo</span>
+                            <span class="feature-badge">Atualizações simultâneas</span>
+                            <span class="feature-badge">Manutenção simplificada</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IA -->
+                <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="tech-card">
+                        <div class="icon-tech">
+                            <i class="bi bi-cpu"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Inteligência Artificial</h4>
+                        <p class="text-muted mb-4">
+                            Algoritmos preditivos que aprendem com seus dados para otimizar automaticamente
+                            o processo de secagem e prevenir perdas.
+                        </p>
+                        <div class="mb-3">
+                            <span class="feature-badge">Previsão de umidade</span>
+                            <span class="feature-badge">Otimização automática</span>
+                            <span class="feature-badge">Alertas inteligentes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IoT -->
+                <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="tech-card">
+                        <div class="icon-tech">
+                            <i class="bi bi-wifi"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">IoT e Tempo Real</h4>
+                        <p class="text-muted mb-4">
+                            Monitoramento contínuo com sensores IoT e processamento de dados em tempo real
+                            para decisões imediatas.
+                        </p>
+                        <div class="mb-3">
+                            <span class="feature-badge">Dados instantâneos</span>
+                            <span class="feature-badge">Integração total</span>
+                            <span class="feature-badge">Automação completa</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- POR QUE FLUTTER -->
+    <section class="py-5 py-xl-12 bg-white">
+        <div class="container px-5">
+            <div class="text-center mb-8" data-aos="fade-up">
+                <h2 class="fw-bold display-5 mb-3">
+                    Por que escolhemos <span class="text-success">Flutter</span>?
+                </h2>
+                <p class="text-muted fs-5">O mercado reconhece as vantagens do desenvolvimento multiplataforma</p>
+            </div>
+
+            <div class="row g-5 text-center">
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="benefit-number mb-3">1</div>
+                    <h4 class="fw-bold mb-3">Redução de Custos</h4>
+                    <p class="text-muted">
+                        Um único desenvolvimento para todas as plataformas significa
+                        <strong>economia de até 50%</strong> em custos de desenvolvimento e manutenção.
+                    </p>
+                </div>
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="benefit-number mb-3">2</div>
+                    <h4 class="fw-bold mb-3">Experiência Consistente</h4>
+                    <p class="text-muted">
+                        A mesma interface e funcionalidades em todos os dispositivos,
+                        garantindo melhor experiência do usuário.
+                    </p>
+                </div>
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="benefit-number mb-3">3</div>
+                    <h4 class="fw-bold mb-3">Atualizações Simultâneas</h4>
+                    <p class="text-muted">
+                        Novas funcionalidades disponíveis para todos os usuários ao mesmo tempo,
+                        independente da plataforma.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IA + TEMPO REAL = RESULTADOS -->
+    <section class="py-5 py-xl-12 bg-light">
+        <div class="container px-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10" data-aos="fade-up">
+                    <div class="text-center mb-8">
+                        <h2 class="fw-bold display-5 mb-3">
+                            IA + Tempo Real = <span class="text-success">Resultados</span>
+                        </h2>
+                        <p class="text-muted fs-5">
+                            Nossa plataforma combina inteligência artificial com processamento em tempo real
+                            para oferecer máxima eficiência operacional
+                        </p>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                            <div class="tech-card text-center h-100">
+                                <div class="icon-tech mx-auto">
+                                    <i class="bi bi-gear"></i>
+                                </div>
+                                <h5 class="fw-bold">Otimização Automática</h5>
+                                <p class="text-muted">
+                                    Algoritmos que ajustam automaticamente os parâmetros de secagem baseados
+                                    em condições ambientais em tempo real
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                            <div class="tech-card text-center h-100">
+                                <div class="icon-tech mx-auto">
+                                    <i class="bi bi-shield-exclamation"></i>
+                                </div>
+                                <h5 class="fw-bold">Prevenção de Perdas</h5>
+                                <p class="text-muted">
+                                    Sistema preditivo que identifica riscos antes que causem danos aos grãos,
+                                    garantindo qualidade superior
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                            <div class="tech-card text-center h-100">
+                                <div class="icon-tech mx-auto">
+                                    <i class="bi bi-lightning-charge"></i>
+                                </div>
+                                <h5 class="fw-bold">Decisões Imediatas</h5>
+                                <p class="text-muted">
+                                    Dados processados em milissegundos para ações corretivas instantâneas,
+                                    minimizando impactos operacionais
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AGRO 4.0 -->
+    <section class="py-5 py-xl-12 bg-white">
+        <div class="container px-5">
+            <div class="text-center mb-8" data-aos="fade-up">
+                <h2 class="fw-bold display-5 mb-3">
+                    Bem-vindo ao <span class="text-success">Agronegócio 4.0</span>
+                </h2>
+                <p class="text-muted fs-5">
+                    A quarta revolução industrial chegou ao campo com tecnologias que transformam
+                    completamente a gestão agrícola
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="tech-card text-center">
+                        <div class="icon-tech mx-auto">
+                            <i class="bi bi-wifi"></i>
+                        </div>
+                        <h5 class="fw-bold">IoT e Conectividade</h5>
+                        <p class="text-muted">
+                            Sensores inteligentes coletam dados continuamente, enviando informações
+                            para a nuvem em tempo real
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="tech-card text-center">
+                        <div class="icon-tech mx-auto">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <h5 class="fw-bold">Automação Inteligente</h5>
+                        <p class="text-muted">
+                            Sistemas que tomam decisões autônomas baseadas em dados históricos
+                            e condições atuais
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="tech-card text-center">
+                        <div class="icon-tech mx-auto">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h5 class="fw-bold">Big Data Analytics</h5>
+                        <p class="text-muted">
+                            Processamento de milhões de pontos de dados para insights acionáveis
+                            e previsões precisas
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="tech-card text-center">
+                        <div class="icon-tech mx-auto">
+                            <i class="bi bi-link-45deg"></i>
+                        </div>
+                        <h5 class="fw-bold">Integração Total</h5>
+                        <p class="text-muted">
+                            Todas as etapas do processo conectadas, da colheita ao armazenamento
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VANTAGENS COMPETITIVAS -->
+    <section class="py-5 py-xl-12 bg-light">
+        <div class="container px-5">
+            <div class="text-center mb-8" data-aos="fade-up">
+                <h2 class="fw-bold display-5 mb-3">
+                    <span class="text-success">Vantagens Competitivas</span>
+                </h2>
+                <p class="text-muted fs-5">Nossa abordagem tecnológica oferece diferenciais únicos no mercado</p>
+            </div>
+
+            <div class="row g-5">
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="tech-card text-center">
+                        <div class="icon-tech mx-auto">
+                            <i class="bi bi-lightning"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Tempo Real</h4>
+                        <p class="text-muted">
+                            Monitoramento contínuo com atualizações instantâneas, permitindo resposta
+                            imediata a qualquer variação nas condições de secagem
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="tech-card text-center">
+                        <div class="icon-tech mx-auto">
+                            <i class="bi bi-layers"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Multiplataforma</h4>
+                        <p class="text-muted">
+                            Acesso em qualquer dispositivo com experiência consistente. Desenvolvido
+                            uma vez, executado em todas as plataformas
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="tech-card text-center">
+                        <div class="icon-tech mx-auto">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">IA Preditiva</h4>
+                        <p class="text-muted">
+                            Algoritmos que aprendem com seus dados históricos para prever problemas
+                            e otimizar automaticamente o processo
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section id="contato" class="py-5 py-xl-12 cta-section text-white">
+        <div class="container px-5 position-relative">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8" data-aos="zoom-in">
+                    <h2 class="display-5 fw-bold mb-4">
+                        Pronto para a revolução digital no campo?
+                    </h2>
+                    <p class="fs-5 mb-5 opacity-90">
+                        Agende uma demonstração e descubra como Flutter, IA e tempo real podem transformar sua operação.
+                    </p>
+                    <a href="#" class="btn btn-light btn-lg px-5 py-3 fw-bold">
+                        <i class="bi bi-calendar-check me-2"></i>Agendar Demonstração
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true,
+        easing: 'ease-out-cubic'
+    });
+</script>
 {% endblock %}

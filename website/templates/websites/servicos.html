@@ -1,95 +1,225 @@
 {% extends "websites/base.html" %}
-{% block title %}Serviços{% endblock %}
+{% block title %}Serviços - Secagem Digital{% endblock %}
 {% load static %}
+
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+<style>
+    :root { --v: #29913c; --l: #34a853; }
+    .bg-gradient-verde { background: linear-gradient(135deg, var(--v), var(--l)); }
+    .text-gradient {
+        background: linear-gradient(135deg, var(--v), var(--l));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .card-process {
+        background: white; border: none; border-radius: 32px;
+        overflow: visible !important; /* CORRIGIDO */
+        position: relative;
+        box-shadow: 0 15px 45px rgba(41,145,60,.12);
+        transition: all .5s ease;
+        padding-top: 60px; /* ESPAÇO PARA O ÍCONE */
+    }
+    .card-process:hover {
+        transform: translateY(-18px);
+        box-shadow: 0 35px 80px rgba(41,145,60,.22);
+    }
+    .card-process::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+        background: linear-gradient(90deg, var(--v), var(--l));
+        border-radius: 32px 32px 0 0;
+    }
+    .icon-float {
+        width: 100px; height: 100px; border-radius: 50%;
+        background: linear-gradient(135deg, var(--v), var(--l));
+        display: flex; align-items: center; justify-content: center;
+        color: white; font-size: 2.6rem;
+        box-shadow: 0 20px 40px rgba(41,145,60,.35);
+        position: absolute;
+        top: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        transition: all .4s ease;
+    }
+    .card-process:hover .icon-float {
+        transform: translateX(-50%) translateY(-8px) scale(1.1);
+    }
+    .process-body {
+        padding: 20px 30px 40px;
+        text-align: center;
+    }
+    .badge-step {
+        background: rgba(41,145,60,.12); color: var(--v);
+        border: 2px solid var(--v); padding: .5rem 1.2rem;
+        border-radius: 50px; font-weight: 800; font-size: .9rem;
+        letter-spacing: 0.5px;
+    }
+    @media (max-width: 768px) {
+        .card-process { padding-top: 50px; }
+        .icon-float {
+            width: 80px; height: 80px;
+            font-size: 2rem;
+            top: -40px;
+        }
+        .process-body { padding: 15px 20px 35px; }
+    }
+</style>
+
 <main class="flex-shrink-0">
 
-    <section class="bg-light py-5">
+    <!-- HERO SERVIÇOS -->
+    <section class="py-5 py-xl-12 bg-light">
         <div class="container px-5">
-            <div class="row gx-5 justify-content-center">
-                <div class="col-xxl-8">
-                    <div class="text-center">
-                        <h4 class="display-7 fw-bolder"><span
-                                class="text-gradient d-inline">Software sob demanda
-                        </span></h4>
-                        <p class="text-muted">Nós criamos aplicativos e aplicações web sob demanda, de acordo com as
-                            suas necessidades. Você nos conta o que você quer e nós desenvolvemos a solução ideal para
-                            você. Assim, você tem um produto personalizado, que se adapta ao seu negócio, ao seu mercado
-                            e aos seus usuários. Nós usamos as melhores tecnologias e metodologias para entregar
-                            soluções de qualidade.
-                            Para isso, precisamos: entender as necessidades do cliente, dividir o projeto em partes,
-                            escrever o código, testar o sistema e entregar para o cliente. É um processo que requer
-                            cuidado e criatividade, mas que nos deixa felizes por criar uma solução real e eficiente.
-                        </p>
+            <div class="row justify-content-center text-center" data-aos="fade-up">
+                <div class="col-lg-10 col-xxl-8">
+                    <div class="text-center" data-aos="fade-up">
+                        <h1 class="titulo-verde-gigante">
+                            <span class="text-gradient">Nossos Serviços</span>
+                        </h1>
+                    </div>
+                    <p class="lead text-muted mb-5">
+                        Desenvolvemos soluções digitais completas com <strong>Inteligência Artificial, Python e
+                        Flutter</strong>,<br>
+                        do levantamento de requisitos até a implantação com suporte contínuo.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- SOFTWARE SOB DEMANDA -->
+    <section class="py-5 py-xl-10 bg-white">
+        <div class="container px-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10" data-aos="fade-up">
+                    <div class="text-center p-5 p-xl-7 rounded-4 bg-gradient-verde text-white"
+                         style="border-radius: 32px;">
+                        <h2 class="fw-bold mb-4">Software Sob Demanda</h2>
+                        <p class="fs-5 opacity-90">
+                            Criamos aplicativos web, mobile e desktop <strong>100% personalizados</strong> para o
+                            agronegócio e indústrias.<br>
+                            Cada linha de código é pensada para resolver seu problema específico com <strong>IA que
+                            prevê, automatiza e gera resultados reais</strong>.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div>
-        <section>
-            <div class="container px-5  ">
-                <div class="row gx-5  justify-content-center">
-                    <div class="col-lg-6 1">
-                        <div>
-                            <h4 class="display-7 fw-bolder"><span
-                                    class="text-gradient d-inline">Levantamento de requisitos
-                        </span></h4>
-                            <p style="text-align: justify;">Nossa equipe trabalha com você para entender as suas
-                                necessidades e criar o produto que você deseja. Para isso, usamos dois modos de
-                                levantamento
-                                de requisitos: a visita técnica e as reuniões online. Na visita técnica, um membro da
-                                nossa
-                                equipe vai até o seu local para ver de perto o seu problema e as suas soluções. Nas
-                                reuniões
-                                online, conversamos com você por videochamada para tirar as suas dúvidas e definir as
-                                funcionalidades do produto. Assim, conseguimos obter as informações iniciais sobre o
-                                produto
-                                a ser desenvolvido.</p>
+    <!-- PROCESSO – AGORA 100% CORRIGIDO -->
+    <section class="py-5 py-xl-12 bg-light">
+        <div class="container px-5">
+            <div class="text-center mb-7" data-aos="fade-up">
+                <h2 class="fw-bold mb-3">
+                    <span class="text-gradient">Nosso Processo</span>
+                </h2>
+                <p class="text-muted fs-5">Etapas claras, transparentes e focadas em qualidade</p>
+            </div>
+            </br>
+            </br>
+            </br>
+            <div class="row g-5 justify-content-center">
+
+                <!-- ETAPA 1 -->
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="card-process h-100">
+                        <div class="icon-float">
+                            <i class="bi bi-binoculars-fill"></i>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div>
-                            <h4 class="display-7 fw-bolder"><span
-                                    class="text-gradient d-inline">Prototipagem
-                        </span></h4>
-                            <p style="text-align: justify;">Depois de entender o que o cliente quer, nós criamos um
-                                protótipo que não funciona de verdade, mas que mostra como o sistema vai ser. Assim, nós
-                                podemos confirmar se o cliente gostou da nossa solução.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div>
-                            <h4 class="display-7 fw-bolder"><span
-                                    class="text-gradient d-inline">Testes
-                        </span></h4>
-                            <p style="text-align: justify;">Nós testamos o sistema várias vezes para ver se tudo está
-                                funcionando como o cliente pediu. No final, nós também pedimos para algumas pessoas
-                                usarem o
-                                sistema e nos derem um feedback. Assim, nós garantimos a qualidade do nosso produto.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6  ">
-                        <div>
-                            <h4 class="display-7 fw-bolder"><span
-                                    class="text-gradient d-inline">Implantação de software
-                        </span></h4>
-                            <p style="text-align: justify;">
-                                A implantação de software é quando colocamos o sistema que criamos em funcionamento para
-                                os usuários. Para isso, precisamos: instalar o software nos servidores, configurar os
-                                sistemas, migrar os dados dos sistemas antigos, treinar e capacitar os usuários, criar a
-                                documentação, monitorar o uso do sistema e oferecer suporte técnico. É um processo que
-                                requer cuidado e atenção, mas que nos deixa orgulhosos por entregar uma solução de
-                                qualidade para o cliente.
+                        <div class="process-body">
+                            <span class="badge-step mb-3 d-inline-block">ETAPA 1</span>
+                            <h4 class="text-gradient fw-bold mt-3">Levantamento de Requisitos</h4>
+                            <p class="text-muted px-3">
+                                Visita técnica presencial ou reuniões online detalhadas para compreender profundamente
+                                seu fluxo de trabalho, desafios e objetivos.
                             </p>
                         </div>
                     </div>
                 </div>
+
+                <!-- ETAPA 2 -->
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="card-process h-100">
+                        <div class="icon-float">
+                            <i class="bi bi-palette-fill"></i>
+                        </div>
+                        <div class="process-body">
+                            <span class="badge-step mb-3 d-inline-block">ETAPA 2</span>
+                            <h4 class="text-gradient fw-bold mt-3">Prototipagem</h4>
+                            <p class="text-muted px-3">
+                                Desenvolvemos protótipos interativos que mostram exatamente como será a interface
+                                e experiência do usuário final.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ETAPA 3 -->
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="card-process h-100">
+                        <div class="icon-float">
+                            <i class="bi bi-gear-wide-connected"></i>
+                        </div>
+                        <div class="process-body">
+                            <span class="badge-step mb-3 d-inline-block">ETAPA 3</span>
+                            <h4 class="text-gradient fw-bold mt-3">Desenvolvimento</h4>
+                            <p class="text-muted px-3">
+                                Codificação com Python, Flutter e FastAPI seguindo as melhores práticas de
+                                clean code, segurança e performance.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ETAPA 4 -->
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="card-process h-100">
+                        <div class="icon-float">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <div class="process-body">
+                            <span class="badge-step mb-3 d-inline-block">ETAPA 4</span>
+                            <h4 class="text-gradient fw-bold mt-3">Testes</h4>
+                            <p class="text-muted px-3">
+                                Testes automatizados, manuais e com usuários reais para garantir
+                                funcionamento perfeito em todos os cenários.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ETAPA 5 -->
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="500">
+                    <div class="card-process h-100">
+                        <div class="icon-float">
+                            <i class="bi bi-cloud-upload"></i>
+                        </div>
+                        <div class="process-body">
+                            <span class="badge-step mb-3 d-inline-block">ETAPA 5</span>
+                            <h4 class="text-gradient fw-bold mt-3">Implantação</h4>
+                            <p class="text-muted px-3">
+                                Publicação em Firebase + Hostinger, migração de dados, treinamento da equipe
+                                e entrega de documentação completa.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
 
 </main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true,
+        easing: 'ease-out-cubic'
+    });
+</script>
 {% endblock %}

@@ -1,273 +1,376 @@
 {% extends "websites/base.html" %}
-{% block title %}Equipe{% endblock %}
+{% block title %}Equipe - Secagem Digital{% endblock %}
 {% load static %}
+
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+<style>
+    :root {
+        --v: #29913c;
+        --l: #34a853;
+        --d: #1e6b2d;
+    }
+    .bg-gradient-verde { background: linear-gradient(135deg, var(--v), var(--l)); }
+    .text-gradient {
+        background: linear-gradient(135deg, var(--v), var(--l));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* CORREÇÃO NAVBAR */
+    .navbar .nav-link i,
+    .navbar .active i,
+    .navbar i.bi {
+        background: none !important;
+        color: inherit !important;
+        padding: 0 !important;
+    }
+
+    .team-hero {
+        font-size: clamp(2.8rem, 8vw, 4.5rem);
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: -1.5px;
+    }
+
+    .team-card {
+        background: white;
+        border-radius: 32px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(41,145,60,.15);
+        transition: all .5s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        border: 3px solid transparent;
+    }
+    .team-card:hover {
+        transform: translateY(-20px);
+        box-shadow: 0 35px 80px rgba(41,145,60,.28);
+        border-color: var(--v);
+    }
+
+    .team-img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        transition: transform .6s ease;
+        border-bottom: 6px solid var(--v);
+    }
+    .team-card:hover .team-img {
+        transform: scale(1.08);
+    }
+
+    .team-body {
+        padding: 2rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .team-name {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: var(--d);
+        margin-bottom: .8rem;
+    }
+
+    .team-desc {
+        font-size: .92rem;
+        color: #555;
+        line-height: 1.55;
+        flex-grow: 1;
+        margin-bottom: 1rem;
+    }
+
+    .lattes-btn {
+        background: linear-gradient(135deg, var(--v), var(--l));
+        color: white;
+        padding: .7rem 1.4rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: .9rem;
+        text-decoration: none;
+        display: inline-block;
+        transition: all .4s ease;
+        box-shadow: 0 8px 25px rgba(41,145,60,.3);
+        align-self: flex-start;
+    }
+    .lattes-btn:hover {
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 15px 35px rgba(41,145,60,.4);
+        color: white;
+    }
+
+    .quote-final {
+        font-size: 1.4rem;
+        font-style: italic;
+        color: var(--v);
+        background: rgba(41,145,60,.08);
+        padding: 2.5rem;
+        border-radius: 32px;
+        border-left: 6px solid var(--v);
+    }
+
+    /* RESPONSIVIDADE PERFEITA */
+    @media (max-width: 992px) {
+        .team-img { height: 240px; }
+    }
+    @media (max-width: 768px) {
+        .team-hero { font-size: 3.2rem; }
+        .team-card { border-radius: 28px; }
+        .team-img { height: 220px; }
+        .team-body { padding: 1.8rem; }
+    }
+    @media (max-width: 576px) {
+        .team-hero { font-size: 2.8rem; }
+        .team-img { height: 200px; border-bottom: 5px solid var(--v); }
+        .team-name { font-size: 1.25rem; }
+        .team-desc { font-size: .9rem; }
+        .lattes-btn { padding: .6rem 1.2rem; font-size: .85rem; }
+        .quote-final { font-size: 1.2rem; padding: 2rem; }
+    }
+    @media (max-width: 380px) {
+        .team-hero { font-size: 2.4rem; }
+        .team-img { height: 180px; }
+        .team-body { padding: 1.5rem; }
+    }
+</style>
+
 <main class="flex-shrink-0">
-    <section class="">
-        <section class="bg-light py-5">
-            <div class="container px-5">
-                <div class="row gx-5 justify-content-center">
-                    <div class="col-xxl-8">
-                        <div class="text-center ">
-                            <h5 class="display-7 fw-bolder"><span
-                                    class="text-gradient d-inline">Conheça mais sobre nossa equipe
-                        </span></h5>
-                            <p class="text-muted">Nossa equipe é formada por profissionais de diferentes áreas, que
-                                trabalham com qualidade e ousadia. Temos economistas, administradores, advogados,
-                                geógrafos, agrônomos, químicos, e especialistas em computação, inteligência
-                                artificial,
-                                design e marketing. Juntos, criamos soluções inovadoras e eficientes para os nossos
-                                clientes. Nossa equipe é um time de talentos e saberes diversos.</p>
-                        </div>
+
+<!-- HERO EQUIPE -->
+<section class="py-5 py-xl-16 bg-light">
+    <div class="container px-5">
+        <div class="row justify-content-center text-center" data-aos="fade-up">
+            <div class="col-lg-10 col-xxl-8">
+                <h1 class="team-hero mb-4">
+                    <span class="text-gradient">Nossa Equipe</span>
+                </h1>
+                <p class="lead text-muted mb-5 fs-3 fw-medium">
+                    Um time multidisciplinar com <strong>agrônomos, engenheiros, devs e doutores</strong><br>
+                    que transformam conhecimento em tecnologia de verdade.
+                </p>
+                <p class="text-muted px-lg-5">
+                    Nossa equipe é formada por profissionais de diferentes áreas, que trabalham com qualidade e ousadia. Temos economistas, administradores, advogados, geógrafos, agrônomos, químicos, e especialistas em computação, inteligência artificial, design e marketing. Juntos, criamos soluções inovadoras e eficientes para os nossos clientes. Nossa equipe é um time de talentos e saberes diversos.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MEMBROS DA EQUIPE -->
+<section class="py-5 py-xl-12 bg-white">
+    <div class="container px-5">
+        <div class="row g-5 justify-content-center">
+
+            <!-- Ariel Oliveira da Mota -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="team-card">
+                    <img src="{% static 'assets/pf5.jpg' %}" alt="Ariel Oliveira da Mota" class="team-img">
+                    <div class="team-body">
+                        <h5 class="team-name">Ariel Oliveira da Mota</h5>
+                        <p class="team-desc">
+                            Graduado em: Análise e Desenvolvimento de Sistemas, Instituto Federal Goiano Campus Iporá-GO.
+                        </p>
+                        <a href="http://lattes.cnpq.br/8327368764914170" target="_blank" class="lattes-btn">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Saiba mais no Lattes
+                        </a>
                     </div>
                 </div>
             </div>
-        </section>
-        <div class="container  ">
-            <br>
-            <section class="page-section " id="team">
-                <div class="container">
-                    <div class="text-center">
 
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static 'assets/pf5.jpg' %}" alt="...">
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">Ariel Oliveira da Mota</h5>
-                                    <p style="font-size: 12px;">Graduado em: Análise e Desenvolvimento de Sistemas,
-                                        Instituto Federal Goiano
-                                        Campus Iporá-GO.
-                                        <a href="http://lattes.cnpq.br/8327368764914170" class="alert-link"
-                                           target="_blank">Saiba mais</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static 'assets/pf7.jpeg' %}" alt="...">
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">Daniel Emanuel Cabral de Oliveira</h5>
-                                    <p style="font-size: 12px;">
-                                        Graduado em Engenharia Agrícola pela Universidade Estadual de Goiás, em
-                                        Santa
-                                        Helena de Goiás.
-                                        Graduado em Tecnologia em Agronegócio pelo Instituto Federal Goiano.
-                                        Mestrado em Ciências Agrárias pelo Instituto Federal Goiano e
-                                        Doutorado em Ciências Agrárias - Agronomia pelo Instituto Federal Goiano.
-                                        Professor efetivo no Instituto Federal Goiano - Campus Iporá-GO.
-                                        <a href="http://lattes.cnpq.br/4999437112211186" class="alert-link"
-                                           target="_blank">Saiba
-                                            mais</a>
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static 'assets/pf2.jpeg' %}" alt="...">
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">Daniela Cabral de Oliveira</h5>
-                                    <p style="font-size: 12px;">
-                                        Graduada em Sistemas de Informação pela Universidade Estadual de Goiás.
-                                        Mestrado em Engenharia Mecânica pela Universidade Estadual Paulista Júlio de
-                                        Mesquita Filho e
-                                        Doutorado em Engenharia Mecânica pela Universidade Estadual Paulista Júlio
-                                        de
-                                        Mesquita Filho.
-                                        Pós-doutorado em Engenharia Mecânica na Universidade Estadual Paulista
-                                        "Júlio de Mesquita Filho", Campus Ilha Solteira.
-                                        Em andamento Pós Doutorado em Tecnologia de Alimentos pelo Instituto Federal
-                                        Goiano Campus Rio Verde.
-                                        <a href="http://lattes.cnpq.br/2113470352941981" class="alert-link"
-                                           target="_blank">Saiba
-                                            mais</a>
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static 'assets/pf13.jpg' %}" alt="...">
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">Danihanne Borges e Silva</h5>
-                                    <p style="font-size: 12px;">
-                                        Possui graduação em Enfermagem pela FMB - Faculdade Montes Belos (2011). Pós
-                                        graduação em Master em
-                                        Marketing, Estratégia e Inovação Digital pela Uniaraguaia Campus
-                                        Goiânia-GO(EAD), concluída em 2021. No ano de 2021 começou Bacharel em Agronomia
-                                        pelo IF Goiano - Campus Iporá- GO (em andamento)
-                                        <a href="http://lattes.cnpq.br/6832012576453664" class="alert-link"
-                                           target="_blank">Saiba
-                                            mais</a>
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static 'assets/pf1.png' %}" alt="...">
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">Dionatan Pontes de Oliveira</h5>
-                                    <p style="font-size: 12px;">Graduado em: Análise e Desenvolvimento de Sistemas,
-                                        Instituto Federal Goiano
-                                        Campus Iporá-GO.
-                                        <a href="http://lattes.cnpq.br/0289613678051080" class="alert-link"
-                                           target="_blank">Saiba
-                                            mais</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static 'assets/pf9.jpeg' %}" alt="...">
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">Helder Oliveira Gomes de Souza</h5>
-                                    <p style="font-size: 12px;">Discente do curso de Ciência da Computação na
-                                        Universidade do Estado de Mato Grosso com experiência na área de Robótica,
-                                        Mecatrônica e Automação..
-                                        <a href="http://lattes.cnpq.br/0834958608563351" class="alert-link"
-                                           target="_blank">Saiba
-                                            mais</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static 'assets/pf6.jpg' %}" alt="...">
-
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">Hiury Lima Oliveira</h5>
-                                    <p style="font-size: 12px;">Graduado em: Análise e Desenvolvimento de Sistemas,
-                                        Instituto Federal Goiano
-                                        Campus Iporá-GO.
-                                        <a href="http://lattes.cnpq.br/9566357643769103" class="alert-link"
-                                           target="_blank">Saiba mais</a>
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static 'assets/pf12.jpeg' %}" alt="...">
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">José Carlos de Sousa Júnior</h5>
-                                    <p style="font-size: 12px;">
-                                        Graduado em Administração - Habilitação em Agronegócios, pela Universidade
-                                        Estadual de Goiás - UEG.
-                                        Técnico em Contabilidade pelo Instituto Federal Goiano - IF Goiano;
-                                        Especialista
-                                        em Marketing e
-                                        Gestão Estratégica pela Universidade Cândido Mendes - UCAM.
-                                        Mestrado em Desenvolvimento Rural Sustentável pela Universidade Estadual de
-                                        Goiás - UEG.
-                                        Professor efetivo no Instituto Federal Goiano - Campus Iporá-GO.
-                                        <a href="http://lattes.cnpq.br/9146562480275155" class="alert-link"
-                                           target="_blank">Saiba
-                                            mais</a>
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static 'assets/pf8.jpg' %}" alt="...">
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">Maria Gláucia Dourado Furquim</h5>
-                                    <p style="font-size: 12px;">
-                                        Maria Gláucia Dourado Furquim
-                                        Graduada em Administração com habilitação em Agronegócio pela Universidade
-                                        Estadual de Goiás - UEG.
-                                        Especialista em Auditoria e Perícia Ambiental pela Universidade de Rio Verde
-                                        -
-                                        UniRV.
-                                        MBA em Gestão Estratégica de Negócios pela Universidade Estadual de Goiás -
-                                        UEG.
-                                        Mestrado em Agronegócio pela Universidade Federal de Goiás - UFG.
-                                        Professora Efetiva no Instituto Federal Goiano - Campus Iporá-GO.
-                                        <a href="http://lattes.cnpq.br/2681775689273863" class="alert-link"
-                                           target="_blank">Saiba
-                                            mais</a>
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static 'assets/pf4.jpg' %}" alt="...">
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">Osvaldo Resende </h5>
-                                    <p style="font-size: 12px;">
-                                        Graduado em Engenharia Agrícola pela Universidade Federal de Lavras.
-                                        Mestrado em Ciências dos Alimentos pela Universidade Federal de Lavras.
-                                        Doutorado em Engenharia Agrícola pela Universidade Federal de Viçosa.
-                                        Atualmente é Revisor Técnico de diversos periódicos científicos e professor do
-                                        Instituto
-                                        Federal de Educação, Ciência e Tecnologia Goiano, Campus Rio Verde-GO.
-                                        <a href="http://lattes.cnpq.br/6442201572676110" class="alert-link"
-                                           target="_blank">Saiba
-                                            mais</a>
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static 'assets/pf11.jpeg' %}" alt="...">
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">Rafael de Oliveira e Silva</h5>
-                                    <p style="font-size: 12px;">Graduação em Engenharia Mecânica pela Universidade de
-                                        Rio Verde, Especialista em Instrumentação e Controle de Processos pela Faculdade
-                                        de Tecnologia SENAI Ítalo Bologna, Mestre em Engenharia Mecânica pela UNESP na
-                                        área de Mecânica dos Sólidos e doutorado em andamento em Engenharia Mecânica
-                                        pela UNESP na área de Mecânica dos Sólidos.
-                                        <a href="http://lattes.cnpq.br/6586121191686679"
-                                           class="alert-link" target="_blank">Saiba mais</a></p>
-
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static 'assets/pf3.jpeg' %}" alt="...">
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">Wayrone Klaiton Luiz Silva</h5>
-                                    <p style="font-size: 12px;">Graduado em: Análise e Desenvolvimento de Sistemas,
-                                        Instituto Federal Goiano
-                                        Campus Iporá-GO
-                                        Graduado em Geografia pela Universidade Estadual de Goiás, Campus Iporá-GO.
-                                        Mestrado em Geografia pela Universidade Federal de Goiás no Campus Jataí-GO.
-                                        <a href="http://lattes.cnpq.br/6448539750494985" class="alert-link"
-                                           target="_blank">Saiba
-                                            mais</a>
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-8 mx-auto text-center"><p class="large text-muted">Trabalhar em equipe é como
-                            um mosaico: cada peça contribui para formar uma imagem completa e bela. 🌟</p></div>
+            <!-- Daniel Emanuel -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="team-card">
+                    <img src="{% static 'assets/pf7.jpeg' %}" alt="Daniel Emanuel" class="team-img">
+                    <div class="team-body">
+                        <h5 class="team-name">Daniel Emanuel Cabral de Oliveira</h5>
+                        <p class="team-desc">
+                            Graduado em Engenharia Agrícola pela Universidade Estadual de Goiás. Mestrado e Doutorado em Ciências Agrárias pelo Instituto Federal Goiano. Professor efetivo no IF Goiano - Campus Iporá-GO.
+                        </p>
+                        <a href="http://lattes.cnpq.br/4999437112211186" target="_blank" class="lattes-btn">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Saiba mais no Lattes
+                        </a>
                     </div>
                 </div>
-            </section>
+            </div>
+
+            <!-- Daniela Cabral -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="team-card">
+                    <img src="{% static 'assets/pf2.jpeg' %}" alt="Daniela Cabral" class="team-img">
+                    <div class="team-body">
+                        <h5 class="team-name">Daniela Cabral de Oliveira</h5>
+                        <p class="team-desc">
+                            Graduada em Sistemas de Informação. Mestrado e Doutorado em Engenharia Mecânica pela UNESP. Pós-doutorado em Tecnologia de Alimentos pelo IF Goiano.
+                        </p>
+                        <a href="http://lattes.cnpq.br/2113470352941981" target="_blank" class="lattes-btn">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Saiba mais no Lattes
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danihanne Borges -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="team-card">
+                    <img src="{% static 'assets/pf13.jpg' %}" alt="Danihanne Borges" class="team-img">
+                    <div class="team-body">
+                        <h5 class="team-name">Danihanne Borges e Silva</h5>
+                        <p class="team-desc">
+                            Graduada em Enfermagem. Pós em Marketing Digital. Bacharel em Agronomia (em andamento) pelo IF Goiano - Campus Iporá.
+                        </p>
+                        <a href="http://lattes.cnpq.br/6832012576453664" target="_blank" class="lattes-btn">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Saiba mais no Lattes
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dionatan Pontes -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="team-card">
+                    <img src="{% static 'assets/pf1.png' %}" alt="Dionatan Pontes" class="team-img">
+                    <div class="team-body">
+                        <h5 class="team-name">Dionatan Pontes de Oliveira</h5>
+                        <p class="team-desc">
+                            Graduado em Análise e Desenvolvimento de Sistemas, Instituto Federal Goiano Campus Iporá-GO.
+                        </p>
+                        <a href="http://lattes.cnpq.br/0289613678051080" target="_blank" class="lattes-btn">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Saiba mais no Lattes
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Helder Oliveira -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="team-card">
+                    <img src="{% static 'assets/pf9.jpeg' %}" alt="Helder Oliveira" class="team-img">
+                    <div class="team-body">
+                        <h5 class="team-name">Helder Oliveira Gomes de Souza</h5>
+                        <p class="team-desc">
+                            Discente de Ciência da Computação na UNEMAT com experiência em Robótica, Mecatrônica e Automação.
+                        </p>
+                        <a href="http://lattes.cnpq.br/0834958608563351" target="_blank" class="lattes-btn">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Saiba mais no Lattes
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hiury Lima -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="team-card">
+                    <img src="{% static 'assets/pf6.jpg' %}" alt="Hiury Lima" class="team-img">
+                    <div class="team-body">
+                        <h5 class="team-name">Hiury Lima Oliveira</h5>
+                        <p class="team-desc">
+                            Graduado em Análise e Desenvolvimento de Sistemas, Instituto Federal Goiano Campus Iporá-GO.
+                        </p>
+                        <a href="http://lattes.cnpq.br/9566357643769103" target="_blank" class="lattes-btn">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Saiba mais no Lattes
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- José Carlos -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="team-card">
+                    <img src="{% static 'assets/pf12.jpeg' %}" alt="José Carlos" class="team-img">
+                    <div class="team-body">
+                        <h5 class="team-name">José Carlos de Sousa Júnior</h5>
+                        <p class="team-desc">
+                            Graduado em Administração Agronegócios. Mestrado em Desenvolvimento Rural Sustentável. Professor efetivo no IF Goiano - Campus Iporá.
+                        </p>
+                        <a href="http://lattes.cnpq.br/9146562480275155" target="_blank" class="lattes-btn">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Saiba mais no Lattes
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Maria Gláucia -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="team-card">
+                    <img src="{% static 'assets/pf8.jpg' %}" alt="Maria Gláucia" class="team-img">
+                    <div class="team-body">
+                        <h5 class="team-name">Maria Gláucia Dourado Furquim</h5>
+                        <p class="team-desc">
+                            Graduada em Administração Agronegócio. Mestrado em Agronegócio pela UFG. Professora Efetiva no IF Goiano - Campus Iporá.
+                        </p>
+                        <a href="http://lattes.cnpq.br/2681775689273863" target="_blank" class="lattes-btn">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Saiba mais no Lattes
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Osvaldo Resende -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="team-card">
+                    <img src="{% static 'assets/pf4.jpg' %}" alt="Osvaldo Resende" class="team-img">
+                    <div class="team-body">
+                        <h5 class="team-name">Osvaldo Resende</h5>
+                        <p class="team-desc">
+                            Doutor em Engenharia Agrícola. Revisor técnico de periódicos científicos. Professor do IF Goiano Campus Rio Verde.
+                        </p>
+                        <a href="http://lattes.cnpq.br/6442201572676110" target="_blank" class="lattes-btn">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Saiba mais no Lattes
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rafael de Oliveira -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="team-card">
+                    <img src="{% static 'assets/pf11.jpeg' %}" alt="Rafael de Oliveira" class="team-img">
+                    <div class="team-body">
+                        <h5 class="team-name">Rafael de Oliveira e Silva</h5>
+                        <p class="team-desc">
+                            Mestre em Engenharia Mecânica pela UNESP. Doutorado em andamento. Especialista em Instrumentação e Controle.
+                        </p>
+                        <a href="http://lattes.cnpq.br/6586121191686679" target="_blank" class="lattes-btn">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Saiba mais no Lattes
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wayrone Klaiton -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="team-card">
+                    <img src="{% static 'assets/pf3.jpeg' %}" alt="Wayrone Klaiton" class="team-img">
+                    <div class="team-body">
+                        <h5 class="team-name">Wayrone Klaiton Luiz Silva</h5>
+                        <p class="team-desc">
+                            Graduado em Análise e Desenvolvimento de Sistemas e Geografia. Mestrado em Geografia pela UFG Jataí.
+                        </p>
+                        <a href="http://lattes.cnpq.br/6448539750494985" target="_blank" class="lattes-btn">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Saiba mais no Lattes
+                        </a>
+                    </div>
+                </div>
+            </div>
 
         </div>
-    </section>
+    </div>
+</section>
+
+
 </main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true,
+        easing: 'ease-out-cubic',
+        offset: 80
+    });
+</script>
 {% endblock %}
