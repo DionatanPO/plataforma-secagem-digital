@@ -21,4 +21,3 @@ Banco de Dados: MySQL
 Deploy: Hostinger
 
 Uso institucional. Direitos reservados à Secagem Digital.
-![Uploading image.png…]()
