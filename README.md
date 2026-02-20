@@ -1,5 +1,3 @@
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/98a15d31-54b4-4b7b-843f-42c1c7b3bda2" />
-
 Secagem Digital
 
 Site institucional da Secagem Digital — startup focada em soluções tecnológicas para monitoramento e otimização do processo de secagem e armazenagem de grãos.
@@ -21,3 +19,5 @@ Banco de Dados: MySQL
 Deploy: Hostinger
 
 Uso institucional. Direitos reservados à Secagem Digital.
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/98a15d31-54b4-4b7b-843f-42c1c7b3bda2" />
