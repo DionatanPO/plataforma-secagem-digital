@@ -1,0 +1,312 @@
+{% extends "websites/base2.html" %}
+{% block title %}Dashboard de Turnos{% endblock %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Fontes e cores */
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background-color: #f9fafb;
+      color: #343a40;
+    }
+
+    h4.display-7 {
+      font-weight: 800;
+      font-size: 2.5rem;
+      background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .fw-bolder {
+      font-weight: 700;
+    }
+
+    .text-muted {
+      color: #6c757d !important;
+    }
+
+    /* Cards */
+    .card {
+      border-radius: 1rem !important;
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+    }
+
+    .card-body h6 {
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-body h3 {
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 0;
+    }
+
+    #total-turnos {
+      color: #2563eb;
+    }
+
+    #turnos-ativos {
+      color: #facc15;
+    }
+
+    #turnos-finalizados {
+      color: #16a34a;
+    }
+
+    section.bg-light {
+      background-color: #f3f4f6 !important;
+      padding-top: 4rem !important;
+      padding-bottom: 4rem !important;
+    }
+
+    h5.fw-bold {
+      font-size: 1.4rem;
+      color: #1e293b;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    h5.fw-bold::before {
+      display: inline-block;
+      margin-right: 0.5rem;
+      font-weight: 700;
+    }
+
+    .spinner-border {
+      width: 3rem;
+      height: 3rem;
+      border-width: 0.35em;
+    }
+</style>
+
+<main class="flex-shrink-0">
+    <section class="bg-light py-5">
+        <div class="container px-5">
+            <div class="row gx-5 justify-content-center">
+                <div class="col-xxl-8">
+                    <div class="text-center">
+                        <h4 class="display-7 fw-bolder">
+                            <span class="text-gradient d-inline">Dashboard de Turnos</span>
+                        </h4>
+                        <p class="fs-5 fw-semibold"><strong>Atualizado em tempo real </strong></p>
+                        <a href="{% url 'page3' %}" class="btn btn-primary mt-3">
+                            Ver Mapa de Zonas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Indicadores -->
+    <div class="container my-4" id="indicadores">
+        <div class="row g-4 text-center">
+            <div class="col-md-3">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body py-5">
+                        <h6>Total de Turnos</h6>
+                        <h3 id="total-turnos">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body py-5">
+                        <h6>Turnos em Andamento</h6>
+                        <h3 id="turnos-ativos">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body py-5">
+                        <h6>Finalizados</h6>
+                        <h3 id="turnos-finalizados">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body py-5">
+                        <h6>Total de Km Rodados</h6>
+                        <h3 id="total-km">0 km</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Turnos Ativos -->
+    <div class="container my-5">
+        <h5 class="fw-bold mb-4">🟡 Turnos em Andamento</h5>
+        <div id="ativos" class="row g-4"></div>
+    </div>
+
+    <!-- Turnos Recentes -->
+    <div class="container my-5">
+        <h5 class="fw-bold mb-4">🟢 Turnos finalizados há menos de 2h</h5>
+        <div id="recentes" class="row g-4"></div>
+    </div>
+
+    <!-- Turnos Antigos -->
+    <div class="container my-5">
+        <h5 class="fw-bold mb-4">🔴 Turnos com mais de 2h após término</h5>
+        <div id="antigos" class="row g-4"></div>
+    </div>
+
+    <div class="container text-center my-5">
+        <div class="spinner-border text-primary" role="status" id="loading-spinner">
+            <span class="visually-hidden">Carregando...</span>
+        </div>
+    </div>
+</main>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyByuPhJroOleKowPA6xxa8xFoplNBLtk8g",
+      authDomain: "motorista-2364a.firebaseapp.com",
+      databaseURL: "https://motorista-2364a-default-rtdb.firebaseio.com",
+      projectId: "motorista-2364a",
+      storageBucket: "motorista-2364a.appspot.com",
+      messagingSenderId: "543666163843",
+      appId: "1:543666163843:web:1068acf51de81aff024bb6",
+      measurementId: "G-SMWBY6F93N"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const turnosRef = ref(db, 'turnos');
+
+    const ativosContainer = document.getElementById("ativos");
+    const recentesContainer = document.getElementById("recentes");
+    const antigosContainer = document.getElementById("antigos");
+    const spinner = document.getElementById("loading-spinner");
+
+    const totalTurnos = document.getElementById("total-turnos");
+    const turnosAtivos = document.getElementById("turnos-ativos");
+    const turnosFinalizados = document.getElementById("turnos-finalizados");
+
+    function tempoDecorridoString(inicio, fim) {
+      const diffMs = fim - inicio;
+      if (diffMs < 0) return "Agora";
+      const diffMin = Math.floor(diffMs / (1000 * 60));
+      const horas = Math.floor(diffMin / 60);
+      const minutos = diffMin % 60;
+      let resultado = "";
+      if (horas > 0) resultado += horas + "h ";
+      if (minutos > 0 || horas === 0) resultado += minutos + "m";
+      return resultado + " atrás";
+    }
+
+    onValue(turnosRef, (snapshot) => {
+      spinner.style.display = 'none';
+      ativosContainer.innerHTML = '';
+      recentesContainer.innerHTML = '';
+      antigosContainer.innerHTML = '';
+
+      const data = snapshot.val();
+      if (!data) {
+        ativosContainer.innerHTML = "<p class='text-muted'>Nenhum turno ativo encontrado.</p>";
+        recentesContainer.innerHTML = "<p class='text-muted'>Nenhum turno recente encontrado.</p>";
+        antigosContainer.innerHTML = "<p class='text-muted'>Nenhum turno antigo encontrado.</p>";
+        return;
+      }
+
+      let countTotal = 0;
+      let countAtivos = 0;
+      let countFinalizados = 0;
+      let somaKm = 0;
+      const agora = new Date();
+
+      Object.entries(data).forEach(([turnoId, turno]) => {
+        countTotal++;
+        const isFinalizado = turno.status?.toLowerCase() === 'finalizado';
+        const isAtivo = turno.status?.toLowerCase() === 'em andamento';
+        if (isFinalizado) countFinalizados++;
+        if (isAtivo) countAtivos++;
+
+        const dataInicio = turno.dataInicio ? new Date(turno.dataInicio) : null;
+        const dataTermino = turno.dataTermino ? new Date(turno.dataTermino) : null;
+
+        const tempoDesdeTermino = (isFinalizado && dataTermino)
+          ? tempoDecorridoString(dataTermino, agora)
+          : null;
+
+        const duracaoTurno = (dataInicio && dataTermino)
+          ? tempoDecorridoString(dataInicio, dataTermino).replace(' atrás', '')
+          : '-';
+
+        const kmStr = turno.kmRodados;
+        if (typeof kmStr === 'string') {
+          const num = parseFloat(kmStr.replace(/\s*km$/, ''));
+          if (!isNaN(num)) somaKm += num;
+        }
+
+        const card = `
+          <div class="col-md-6 col-lg-4">
+            <div class="card shadow border-0 rounded-4 h-100">
+              <div class="card-header bg-gradient rounded-top-4 py-3 px-4" style="background: linear-gradient(90deg, #1e3a8a, #3b82f6); color: white;">
+                <div class="d-flex flex-column gap-1">
+                  <h5 class="fw-bold mb-1">${turno.nome || 'Turno sem nome'}</h5>
+                  <small class="text-black d-block mb-2">
+                    <strong>Equipe:</strong> ${turno.equipe || '[sem equipe]'}
+                  </small>
+                  <div class="d-flex align-items-center gap-2 flex-wrap mt-2">
+                    <span class="btn btn-sm ${isFinalizado ? 'btn-success' : isAtivo ? 'btn-warning text-dark' : 'btn-secondary'} disabled">
+                      ${turno.status || '-'}
+                    </span>
+                    ${tempoDesdeTermino ? `<span class="badge bg-white text-dark border">${tempoDesdeTermino}</span>` : ''}
+                  </div>
+                </div>
+              </div>
+              <div class="card-body d-flex flex-column px-4">
+                <p class="mb-1"><strong>ID do Turno:</strong> ${turnoId}</p>
+                <p class="mb-1"><strong>Km Rodados:</strong> ${turno.kmRodados || '-'}</p>
+                <p class="mb-1"><strong>Início:</strong> ${dataInicio ? dataInicio.toLocaleString() : 'N/A'}</p>
+                <p class="mb-1"><strong>Término:</strong> ${dataTermino ? dataTermino.toLocaleString() : 'N/A'}</p>
+                <p class="mb-1"><strong>Duração do Turno:</strong> ${duracaoTurno}</p>
+                <div class="mt-auto pt-3 text-end">
+                  <a href="/page2/${turnoId}" class="btn btn-sm btn-outline-primary rounded-pill">
+                    Ver detalhes
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>`;
+
+        if (isAtivo) {
+          ativosContainer.innerHTML += card;
+        } else if (isFinalizado && dataTermino) {
+          const diferencaHoras = (agora - dataTermino) / (1000 * 60 * 60);
+          if (diferencaHoras > 2) {
+            antigosContainer.innerHTML += card;
+          } else {
+            recentesContainer.innerHTML += card;
+          }
+        }
+      });
+
+      totalTurnos.textContent = countTotal;
+      turnosAtivos.textContent = countAtivos;
+      turnosFinalizados.textContent = countFinalizados;
+      document.getElementById('total-km').textContent = somaKm.toFixed(2) + ' km';
+    });
+</script>
+{% endblock %}

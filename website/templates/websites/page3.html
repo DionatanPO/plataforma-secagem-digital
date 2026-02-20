@@ -1,0 +1,169 @@
+{% extends "websites/base2.html" %}
+{% block title %}Mapa de Zonas{% endblock title %}
+{% load static %}
+
+{% block content %}
+<style>
+  html, body { height:100%; margin:0; padding:0; }
+  #mapid  { height:100vh; width:100%; }
+  #infoCard {
+    position:absolute; top:70px; right:20px; z-index:1000;
+    background:white; padding:15px; border-radius:12px;
+    box-shadow:0 2px 12px rgba(0,0,0,0.2); min-width:300px;
+    display:none;
+  }
+  #notificationCard {
+    position:absolute; top:70px; left:20px; z-index:1000;
+    background:white; padding:15px; border-radius:12px;
+    box-shadow:0 2px 12px rgba(0,0,0,0.2); min-width:250px;
+    max-height:300px; overflow-y:auto;
+  }
+  #notificationCard h5 { margin-top:0; }
+  #notificationCard ul { list-style:none; padding:0; margin:0; }
+  #notificationCard li { padding:6px 0; border-bottom:1px solid #ddd; }
+
+  /* cursor pointer para círculo */
+  .circle-marker {
+    cursor: pointer;
+  }
+</style>
+
+<div id="mapid"></div>
+
+<div id="infoCard">
+  <h5 id="infoZona">Zona</h5>
+  <p><strong>Motorista:</strong> <span id="infoMotorista">-</span></p>
+  <p><strong>Equipe:</strong> <span id="infoEquipe">-</span></p>
+  <p><strong>Horário da Localização:</strong> <span id="infoLocTime">-</span></p>
+  <p><strong>Tempo desde a Localização:</strong> <span id="infoApos">-</span></p>
+</div>
+
+<div id="notificationCard">
+  <h5>Setores com Coleta Atrasada</h5>
+  <ul id="notificacoesLista">
+    <li>Nenhum atraso identificado.</li>
+  </ul>
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <script>
+    // Inicializa Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyByuPhJroOleKowPA6xxa8xFoplNBLtk8g",
+      authDomain: "motorista-2364a.firebaseapp.com",
+      databaseURL: "https://motorista-2364a-default-rtdb.firebaseio.com",
+      projectId: "motorista-2364a",
+      storageBucket: "motorista-2364a.appspot.com",
+      messagingSenderId: "543666163843",
+      appId: "1:543666163843:web:1068acf51de81aff024bb6"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const turnosRef = firebase.database().ref('turnos');
+
+    // Cria o mapa
+    const map = L.map('mapid').setView([-16.4286, -51.1160], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19, attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    const markersLayer = L.layerGroup().addTo(map);
+    const locInfoMap = {}; // chave "lat,lng" → info do turno e timestamp
+
+
+    function loadTurnos() {
+      turnosRef.on('value', snapshot => {
+        const data = snapshot.val();
+        if (!data) return;
+
+        markersLayer.clearLayers();
+        const atrasadosSet = new Set();
+
+        Object.values(data).forEach(turno => {
+          const motorista = turno.nome || '-';
+          const equipe = turno.equipe || '-';
+          const locs = turno.localizacoes || {};
+
+          Object.values(locs).forEach(loc => {
+            const tsString = loc.timestamp;
+            if (!tsString) return;
+
+            const locTime = new Date(Date.parse(tsString));
+            if (isNaN(locTime)) return;
+
+            const latitude = loc.latitude;
+            const longitude = loc.longitude;
+            if (latitude == null || longitude == null) return;
+
+            const now = new Date();
+            const diffHours = (now - locTime) / (1000 * 60 * 60);
+            const isLate = diffHours > 24;
+
+            const key = `${latitude},${longitude}`;
+            locInfoMap[key] = {
+              bairro: loc.bairro || 'Sem Bairro',
+              motorista,
+              equipe,
+              locTime
+            };
+
+            const circle = L.circle([latitude, longitude], {
+              color: isLate ? 'red' : 'green',
+              fillColor: isLate ? 'red' : 'green',
+              fillOpacity: 0.5,
+              radius: 30,
+              className: 'circle-marker'
+            }).addTo(markersLayer);
+
+            circle.on('click', () => showInfo(key));
+
+            if (isLate) atrasadosSet.add(loc.bairro || 'Sem Bairro');
+          });
+        });
+
+        // Atualiza lista notificações
+        const lista = document.getElementById('notificacoesLista');
+        lista.innerHTML = '';
+        if (atrasadosSet.size) {
+          atrasadosSet.forEach(bairro => {
+            lista.innerHTML += `<li><strong>${bairro}</strong></li>`;
+          });
+        } else {
+          lista.innerHTML = '<li>Nenhum atraso identificado.</li>';
+        }
+
+        const allLatLng = markersLayer.getLayers().map(m => m.getLatLng());
+        if (allLatLng.length) {
+          map.fitBounds(L.latLngBounds(allLatLng), { padding: [30, 30] });
+        }
+      });
+    }
+
+    function showInfo(key) {
+      const info = locInfoMap[key];
+      if (!info) return;
+      const now = new Date();
+      const sinceMs = now - info.locTime;
+      document.getElementById('infoZona').innerText = info.bairro;
+      document.getElementById('infoMotorista').innerText = info.motorista;
+      document.getElementById('infoEquipe').innerText = info.equipe;
+      document.getElementById('infoLocTime').innerText = info.locTime.toLocaleString();
+      document.getElementById('infoApos').innerText = msToHMS(sinceMs);
+      document.getElementById('infoCard').style.display = 'block';
+    }
+
+    function msToHMS(ms) {
+      if (ms < 0) return '-';
+      const totalS = Math.floor(ms / 1000);
+      const h = Math.floor(totalS / 3600),
+            m = Math.floor((totalS % 3600) / 60),
+            s = totalS % 60;
+      return `${h}h ${m}min ${s}s`;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadTurnos);
+  </script>
+{% endblock content %}

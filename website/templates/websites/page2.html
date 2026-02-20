@@ -1,0 +1,218 @@
+{% extends "websites/base2.html" %}
+{% block title %}Detalhes{% endblock %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Seus estilos aqui - os mesmos que você já tinha */
+</style>
+
+<div class="content-wrapper">
+    <div class="container-fluid mt-4">
+
+        <!-- Título -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Turno <code>{{ turno_id }}</code></h2>
+        </div>
+
+        <!-- Linha com cards e mapa lado a lado -->
+        <div class="row gx-4 gy-4">
+            <div class="col-12 col-md-5 col-lg-4 d-flex flex-column gap-4">
+
+                <!-- Informações do turno -->
+                <div class="card border-0 shadow-sm rounded-4 flex-grow-1">
+                    <div class="card-body px-4 py-4 d-flex flex-column">
+                        <h3 class="mb-4 fw-light text-secondary border-bottom pb-2">Informações do Turno</h3>
+                        <table class="table table-borderless mb-0">
+                            <tbody>
+                                <tr><th class="text-muted">Motorista</th><td id="turno-nome">—</td></tr>
+                                <tr><th class="text-muted">Equipe</th><td id="turno-equipe">—</td></tr>
+                                <tr><th class="text-muted">Status</th><td><span id="turno-status" class="badge"></span></td></tr>
+                                <tr><th class="text-muted">Início</th><td id="turno-inicio">—</td></tr>
+                                <tr><th class="text-muted">Término</th><td id="turno-termino">—</td></tr>
+                                <tr><th class="text-muted">km</th><td id="turno-kms">—</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tabela de Aterros Sanitários -->
+                <div class="card border-0 shadow-sm rounded-4 flex-grow-1">
+                    <div class="card-body px-4 py-4 d-flex flex-column">
+                        <h3 class="mb-4 fw-light text-secondary border-bottom pb-2">Descargas Registradas no Aterro</h3>
+                        <table class="table table-borderless mb-0" id="tabela-aterros">
+                            <thead>
+                                <tr>
+                                    <th>Data e Hora</th>
+                                    <th>Status do Caminhão</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS preencherá -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Mapa -->
+            <div class="col-12 col-md-7 col-lg-8">
+                <div class="card mb-4 border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body p-0" style="min-height: 400px;">
+                        <div id="mapid" style="width: 100%; height: 100%; border-radius: .5rem;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela de Localizações -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-3"><i class="bi bi-geo-alt me-2"></i>Localizações registradas</h5>
+                <div class="table-responsive">
+                    <table class="table table-borderless mb-0" id="locs-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Endereço</th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
+                                <th>Velocidade</th>
+                                <th>Tempo atrás</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Preenchido via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Firebase + Leaflet + Bootstrap Icons -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"/>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyByuPhJroOleKowPA6xxa8xFoplNBLtk8g",
+        authDomain: "motorista-2364a.firebaseapp.com",
+        databaseURL: "https://motorista-2364a-default-rtdb.firebaseio.com",
+        projectId: "motorista-2364a",
+        storageBucket: "motorista-2364a.appspot.com",
+        messagingSenderId: "543666163843",
+        appId: "1:543666163843:web:1068acf51de81aff024bb6"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    const turnoId = "{{ turno_id }}";
+    const turnoRef = firebase.database().ref(`turnos/${turnoId}`);
+
+    const map = L.map('mapid').setView([0, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+    let polyline = L.polyline([], { color: '#3b82f6' }).addTo(map);
+    const markers = [];
+
+    function formatDate(iso) {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        return d.toLocaleString('pt-BR', {
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit', hour12: false
+        });
+    }
+
+    function formatDurationHM(ms) {
+        const totalMinutes = Math.floor(ms / 60000);
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        return `${hours}h ${minutes}m`;
+    }
+
+    turnoRef.on('value', snap => {
+        const turno = snap.val();
+        if (!turno) return;
+
+        document.getElementById('turno-nome').innerText = turno.nome || '—';
+        document.getElementById('turno-equipe').innerText = turno.equipe || '—';
+        document.getElementById('turno-inicio').innerText = formatDate(turno.dataInicio);
+        document.getElementById('turno-termino').innerText = formatDate(turno.dataTermino);
+        document.getElementById('turno-kms').innerText = turno.kmRodados || '-';
+
+        const statusEl = document.getElementById('turno-status');
+        statusEl.innerText = turno.status || '—';
+        statusEl.className = 'badge ';
+        switch ((turno.status || '').toLowerCase()) {
+            case 'em andamento': statusEl.classList.add('bg-warning', 'text-dark'); break;
+            case 'finalizado': statusEl.classList.add('bg-success'); break;
+            case 'em pausa': statusEl.classList.add('bg-secondary'); break;
+            default: statusEl.classList.add('bg-secondary');
+        }
+
+        // Todos os aterros
+        const aterros = turno.aterro || {};
+        const tabelaAterros = document.querySelector('#tabela-aterros tbody');
+        tabelaAterros.innerHTML = '';
+        Object.values(aterros)
+            .sort((a, b) => new Date(a.horaChegada) - new Date(b.horaChegada))
+            .forEach(aterro => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${formatDate(aterro.horaChegada)}</td>
+                    <td>${aterro.statusCaminhao || '—'}</td>
+                `;
+                tabelaAterros.appendChild(tr);
+            });
+
+        // Localizações
+        const locs = turno.localizacoes || {};
+        const entries = Object.entries(locs).sort((a, b) => new Date(a[1].timestamp) - new Date(b[1].timestamp));
+        markers.forEach(m => map.removeLayer(m));
+        markers.length = 0;
+        map.removeLayer(polyline);
+        polyline = L.polyline([], { color: '#3b82f6' }).addTo(map);
+        const tbody = document.querySelector('#locs-table tbody');
+        tbody.innerHTML = '';
+        const latlngs = [];
+        const now = new Date();
+
+        entries.forEach(([key, loc]) => {
+            const ts = new Date(loc.timestamp);
+            const elapsedMs = now - ts;
+            const elapsedStr = formatDurationHM(elapsedMs);
+            const addr = `${loc.rua || ''}, ${loc.bairro || ''}, ${loc.cidade || ''} - ${loc.estado || ''}`.replace(/(, )+/g, ', ').replace(/^, |, $/g, '');
+            latlngs.push([loc.latitude, loc.longitude]);
+            const mk = L.marker([loc.latitude, loc.longitude]).addTo(map)
+                .bindPopup(`<strong>${formatDate(loc.timestamp)}</strong><br>${addr}<br><em>há ${elapsedStr}</em>`);
+            markers.push(mk);
+            const tr = document.createElement('tr');
+     const velocidade = loc.speed_km_h ? `${loc.speed_km_h} km/h` : '—';
+
+            tr.innerHTML = `
+                <td>${formatDate(loc.timestamp)}</td>
+                <td>${addr}</td>
+                <td>${loc.latitude.toFixed(6)}</td>
+                <td>${loc.longitude.toFixed(6)}</td>
+                <td>${velocidade}</td>
+                <td>${elapsedStr}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        if (latlngs.length) {
+            polyline.setLatLngs(latlngs);
+            map.fitBounds(polyline.getBounds(), { padding: [20, 20] });
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,364 @@
+{% extends "websites/base.html" %}
+{% block title %}Dionatan Oliveira | Full Stack Developer & Mobile Engineer{% endblock %}
+{% load static %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+<style>
+    :root {
+        --v: #29913c;
+        --l: #34a853;
+        --d: #1e6b2d;
+        --accent: #facc15;
+    }
+
+    .portfolio-hero {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: white;
+        padding: 120px 0 80px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .portfolio-hero::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" fill="%2329913c" opacity="0.05"><path d="M0,1000 L1000,0 L1000,1000 Z"/></svg>');
+        background-size: cover;
+    }
+
+    .profile-img {
+        width: 180px;
+        height: 180px;
+        border-radius: 40px;
+        border: 4px solid var(--v);
+        box-shadow: 0 20px 50px rgba(41,145,60,0.3);
+        object-fit: cover;
+        transform: rotate(-3deg);
+        transition: all 0.5s ease;
+    }
+
+    .profile-img:hover {
+        transform: rotate(0deg) scale(1.05);
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 3rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 5px;
+        background: var(--v);
+        border-radius: 10px;
+    }
+
+    .skill-card {
+        background: white;
+        border-radius: 24px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid rgba(41,145,60,0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .skill-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--v);
+        box-shadow: 0 20px 40px rgba(41,145,60,0.1);
+    }
+
+    .experience-item {
+        position: relative;
+        padding-left: 40px;
+        border-left: 2px solid rgba(41,145,60,0.2);
+        margin-bottom: 3rem;
+    }
+
+    .experience-item::before {
+        content: '';
+        position: absolute;
+        left: -9px;
+        top: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--v);
+        border: 4px solid white;
+        box-shadow: 0 0 0 4px rgba(41,145,60,0.1);
+    }
+
+    .badge-tech {
+        background: rgba(41,145,60,0.1);
+        color: var(--v);
+        font-weight: 700;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        margin: 0.2rem;
+        display: inline-block;
+        border: 1px solid rgba(41,145,60,0.2);
+    }
+
+    .project-card-mini {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        transition: all 0.4s ease;
+        border: 1px solid transparent;
+    }
+
+    .project-card-mini:hover {
+        transform: scale(1.03);
+        border-color: var(--v);
+    }
+
+    .contact-link {
+        color: #64748b;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+    }
+
+    .contact-link:hover {
+        color: var(--v);
+        transform: translateX(5px);
+    }
+
+    .floating-nav {
+        position: fixed;
+        right: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .floating-nav { display: none; }
+        .portfolio-hero { padding: 100px 0 60px; }
+        .profile-img { width: 140px; height: 140px; margin-bottom: 2rem; }
+    }
+</style>
+
+<!-- MAIN CONTENT -->
+<main class="bg-light">
+
+    <!-- HERO -->
+    <section class="portfolio-hero">
+        <div class="container px-5">
+            <div class="row align-items-center">
+                <div class="col-lg-3 text-center text-lg-start" data-aos="fade-right">
+                    <img src="{% static 'assets/pf1.png' %}" alt="Dionatan Oliveira" class="profile-img mb-4 mb-lg-0">
+                </div>
+                <div class="col-lg-9 text-center text-lg-start" data-aos="fade-left">
+                    <span class="badge bg-success mb-3 px-3 py-2 rounded-pill">Disponível para Projetos</span>
+                    <h1 class="display-3 fw-black mb-2">Dionatan Oliveira</h1>
+                    <h2 class="h3 fw-bold text-gradient mb-4">Desenvolvedor Full Stack | Mobile (Flutter & Android)</h2>
+                    <p class="lead opacity-90 mb-5 max-width-700">
+                        Transformando desafios complexos em soluções digitais de alta performance. 
+                        Com sólida experiência em <strong>Agronegócio, Mobilidade Urbana e Sistemas de Gestão</strong>, 
+                        atua do hardware (IoT) ao deploy, utilizando as melhores práticas de UX e IA.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                        <a href="#contato" class="btn btn-success btn-lg px-5 rounded-pill fw-bold shadow-lg">
+                            <i class="bi bi-envelope-at me-2"></i>Vamos Conversar
+                        </a>
+                        <a href="https://github.com" target="_blank" class="btn btn-outline-light btn-lg px-5 rounded-pill fw-bold">
+                            <i class="bi bi-github me-2"></i>GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPETÊNCIAS -->
+    <section id="skills" class="py-5 py-xl-12">
+        <div class="container px-5">
+            <h2 class="section-title" data-aos="fade-up">Hard Skills</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+                    <div class="skill-card">
+                        <div class="icon-tech mb-3 text-success fs-1"><i class="bi bi-phone"></i></div>
+                        <h4 class="fw-bold">Mobile</h4>
+                        <p class="text-muted small">Flutter (Android/iOS), Android Nativo (Java), GetX, Material Design 3.</p>
+                        <div class="mt-auto">
+                            <span class="badge-tech">Expert</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="skill-card">
+                        <div class="icon-tech mb-3 text-success fs-1"><i class="bi bi-database"></i></div>
+                        <h4 class="fw-bold">Backend</h4>
+                        <p class="text-muted small">Python (Django), PHP (Laravel), APIs RESTful, Firebase, PostgreSQL.</p>
+                        <div class="mt-auto">
+                            <span class="badge-tech">Full Stack</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+                    <div class="skill-card">
+                        <div class="icon-tech mb-3 text-success fs-1"><i class="bi bi-cpu"></i></div>
+                        <h4 class="fw-bold">IoT & Hardware</h4>
+                        <p class="text-muted small">Integração com sensores, GPS, comunicação via API e validação em campo.</p>
+                        <div class="mt-auto">
+                            <span class="badge-tech">AgTech</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+                    <div class="skill-card">
+                        <div class="icon-tech mb-3 text-success fs-1"><i class="bi bi-git"></i></div>
+                        <h4 class="fw-bold">DevOps</h4>
+                        <p class="text-muted small">Git/GitHub, Deploy Linux (VPS), Firebase Hosting, Google Play Store.</p>
+                        <div class="mt-auto">
+                            <span class="badge-tech">Versátil</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERIÊNCIA -->
+    <section id="experiencia" class="py-5 py-xl-12 bg-white">
+        <div class="container px-5">
+            <h2 class="section-title" data-aos="fade-up">Trajetória Profissional</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    
+                    <div class="experience-item" data-aos="fade-left">
+                        <span class="text-success fw-bold d-block mb-1">2018 – ATUAL</span>
+                        <h4 class="fw-bold">Secagem Digital (Startup AgTech)</h4>
+                        <h5 class="text-muted mb-3">Desenvolvedor Full Stack & Liderança Técnica</h5>
+                        <ul class="text-muted">
+                            <li><strong>Smart Secagem (IoT):</strong> Liderança técnica no MVP para monitoramento de silos.</li>
+                            <li><strong>G-Grãos:</strong> Automação de laudos técnicos PDF alinhados ao MAPA.</li>
+                            <li><strong>Rondo Move:</strong> App de mobilidade com rastreamento em tempo real.</li>
+                            <li><strong>Sistemas Multiplataforma:</strong> Gestão Paroquial (Web/Desktop) e simuladores Mock Location.</li>
+                        </ul>
+                    </div>
+
+                    <div class="experience-item" data-aos="fade-left" data-aos-delay="100">
+                        <span class="text-success fw-bold d-block mb-1">PROJETO</span>
+                        <h4 class="fw-bold">SETTAT Rondonópolis – MT</h4>
+                        <h5 class="text-muted mb-3">Desenvolvedor Web & Backend</h5>
+                        <p class="text-muted">Plataforma em Django para gestão e fiscalização de taxistas e mototaxistas municipais.</p>
+                    </div>
+
+                    <div class="experience-item" data-aos="fade-left" data-aos-delay="200">
+                        <span class="text-success fw-bold d-block mb-1">FORMAÇÃO</span>
+                        <h4 class="fw-bold">Análise e Desenvolvimento de Sistemas</h4>
+                        <h5 class="text-muted">Instituto Federal de Goiás (IFG) – Campus Iporá</h5>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJETOS PORTFOLIO -->
+    <section id="portfolio" class="py-5 py-xl-12">
+        <div class="container px-5">
+            <h2 class="section-title" data-aos="fade-up">Projetos em Destaque</h2>
+            <div class="row g-4">
+                
+                <div class="col-md-4" data-aos="zoom-in">
+                    <div class="project-card-mini p-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <i class="bi bi-calculator-fill text-success fs-2"></i>
+                            <span class="badge bg-light text-dark">Android Nativo</span>
+                        </div>
+                        <h5 class="fw-bold">Classifique Soja</h5>
+                        <p class="text-muted small">Especializado em cálculos de classificação de grãos e laudos técnicos.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="project-card-mini p-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <i class="bi bi-heart-pulse-fill text-danger fs-2"></i>
+                            <span class="badge bg-light text-dark">Firebase Push</span>
+                        </div>
+                        <h5 class="fw-bold">Meu Xodó Pet</h5>
+                        <p class="text-muted small">Gestão de pets com foco em engajamento via Push Notifications.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="project-card-mini p-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <i class="bi bi-smartwatch text-primary fs-2"></i>
+                            <span class="badge bg-light text-dark">IoT / Sensors</span>
+                        </div>
+                        <h5 class="fw-bold">Smart Flexões</h5>
+                        <p class="text-muted small">Contagem automática de repetições utilizando sensor de proximidade.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" class="py-5 py-xl-12 bg-white">
+        <div class="container px-5 text-center">
+            <h2 class="section-title" data-aos="fade-up">Vamos construir algo juntos?</h2>
+            <div class="row justify-content-center mt-5">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-lg rounded-4 p-5">
+                        <div class="row g-4 text-start">
+                            <div class="col-md-6">
+                                <a href="mailto:dionatanoliveirapc@gmail.com" class="contact-link">
+                                    <i class="bi bi-envelope-fill text-success fs-4"></i>
+                                    dionatanoliveirapc@gmail.com
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="https://linkedin.com/in/dionatan-oliveira" target="_blank" class="contact-link">
+                                    <i class="bi bi-linkedin text-success fs-4"></i>
+                                    linkedin.com/in/dionatan-oliveira
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="https://wa.me/5564993256466" target="_blank" class="contact-link">
+                                    <i class="bi bi-whatsapp text-success fs-4"></i>
+                                    (64) 99325-6466
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="https://github.com/dionatan-oliveira" target="_blank" class="contact-link">
+                                    <i class="bi bi-github text-success fs-4"></i>
+                                    github.com/dionatan-oliveira
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+{% endblock %}
